@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tap Car – Бонуси Ҳамстер</title>
-
+    <title>Tap Car – Бонусҳо ва Top рейтинг</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
@@ -28,7 +27,7 @@
             flex: 1;
             display: none;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             flex-direction: column;
             padding: 16px
         }
@@ -37,7 +36,30 @@
             display: flex
         }
 
-        /* GAME */
+        /* Top рейтинг */
+        .top-rating {
+            width: 100%;
+            padding: 16px;
+            background: #1e293b;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            text-align: center
+        }
+
+        .top-rating h1 {
+            color: #22c55e;
+            font-size: 22px;
+            margin-bottom: 12px
+        }
+
+        .top-rating ol {
+            list-style: decimal;
+            padding-left: 20px;
+            color: #fff;
+            text-align: left
+        }
+
+        /* Game */
         .balance {
             font-size: 22px;
             font-weight: 700;
@@ -54,8 +76,9 @@
             transform: scale(1.1)
         }
 
-        /* HAMSTER CARD */
-        .ham-card {
+        /* Card */
+        .ham-card,
+        .ref-card {
             width: 100%;
             max-width: 420px;
             background: linear-gradient(180deg, #0f172a, #020617);
@@ -63,7 +86,7 @@
             padding: 18px;
             margin: 10px 0;
             box-shadow: 0 20px 40px rgba(0, 0, 0, .6);
-            animation: pop .35s ease;
+            animation: pop .35s ease
         }
 
         @keyframes pop {
@@ -105,7 +128,7 @@
             opacity: .8
         }
 
-        /* SOCIAL ROW */
+        /* Social */
         .social-row {
             display: flex;
             gap: 12px;
@@ -127,11 +150,6 @@
             cursor: pointer
         }
 
-        .social-btn svg {
-            width: 20px;
-            fill: #fff
-        }
-
         .social-btn:active {
             transform: scale(.96)
         }
@@ -144,7 +162,16 @@
             background: linear-gradient(135deg, #ec4899, #f97316)
         }
 
-        /* PROGRESS */
+        /* Referral */
+        .ref-card input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 10px
+        }
+
+        /* Progress */
         .progress {
             width: 100%;
             height: 10px;
@@ -162,12 +189,34 @@
             transition: .3s
         }
 
-        /* GLOW */
         .glow {
             box-shadow: 0 0 20px rgba(34, 197, 94, .6)
         }
 
-        /* MENU */
+        /* 3 BOX BONUS */
+        .box-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px
+        }
+
+        .box {
+            flex: 1;
+            padding: 20px;
+            background: #1e293b;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: 0.2s
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+            background: #334155
+        }
+
+        /* Menu */
         .menu {
             height: 60px;
             display: flex;
@@ -190,17 +239,40 @@
 
 <body>
 
-    <!-- GAME -->
+    <!-- GAME SCREEN -->
     <div class="screen active" id="game">
         <div class="balance">💰 Баланс: <span id="money">0</span>$</div>
         <div class="car" id="car">🚗</div>
         <div style="opacity:.7">Тап кун → пул гир</div>
     </div>
 
-    <!-- BONUS -->
-    <div class="screen" id="bonus">
+    <!-- TOP RATING SCREEN -->
+    <div class="screen" id="top">
+        <div class="top-rating">
+            <h1>🏆 Top рейтинг</h1>
+            <ol id="topList"></ol>
+        </div>
+    </div>
 
-        <!-- ONE CARD / TWO ICONS -->
+    <!-- BONUS SCREEN -->
+    <div class="screen" id="bonus">
+        <!-- DAILY BONUS 3 BOX -->
+        <div class="ham-card">
+            <div class="ham-top">
+                <div class="ham-icon">🎲</div>
+                <div>
+                    <div class="ham-title">Бонуси Ҳаррӯза</div>
+                    <div class="ham-reward">Як хонача интихоб кунед, ки 500$ бурдед! (Як бор дар як рӯз)</div>
+                </div>
+            </div>
+            <div class="box-row" id="boxRow">
+                <div class="box" onclick="pickBox(0)">❓</div>
+                <div class="box" onclick="pickBox(1)">❓</div>
+                <div class="box" onclick="pickBox(2)">❓</div>
+            </div>
+        </div>
+
+        <!-- SOCIAL BONUS -->
         <div class="ham-card" id="socialCard">
             <div class="ham-top">
                 <div class="ham-icon">🎁</div>
@@ -209,35 +281,33 @@
                     <div class="ham-reward">Бародар Карго + Instagram (24 соат)</div>
                 </div>
             </div>
-
             <div class="progress">
                 <span id="socialProg"></span>
             </div>
-
             <div class="social-row">
-                <button class="social-btn social-tg" onclick="tgBonus()">
-                    <svg viewBox="0 0 240 240">
-                        <path
-                            d="M120 0C53.7 0 0 53.7 0 120s53.7 120 120 120 120-53.7 120-120S186.3 0 120 0zm58.3 82.6l-20 94.3c-1.5 6.7-5.6 8.3-11.3 5.2l-31.3-23-15.1 14.5c-1.7 1.7-3.1 3.1-6.3 3.1l2.2-31.8 57.9-52.3c2.5-2.2-.5-3.4-3.9-1.2l-71.6 45.1-30.8-9.6c-6.7-2.1-6.8-6.7 1.4-9.9l120.3-46.4c5.6-2.1 10.5 1.4 8.5 11z" />
-                    </svg>
-                    Бародар Карго
-                </button>
-
-                <button class="social-btn social-ig" onclick="igBonus()">
-                    <svg viewBox="0 0 448 512">
-                        <path
-                            d="M224 202a53 53 0 1 0 0 106 53 53 0 0 0 0-106zm124-41a29 29 0 1 0 0 58 29 29 0 0 0 0-58zm76 27c-1.7-35.3-9.9-66.7-36.2-92.9S330.3 60.8 295 59.1c-34.9-2-139.9-2-174.8 0-35.3 1.7-66.7 9.9-92.9 36.2S60.8 181.7 59.1 217c-2 34.9-2 139.9 0 174.8 1.7 35.3 9.9 66.7 36.2 92.9s57.6 34.5 92.9 36.2c34.9 2 139.9 2 174.8 0 35.3-1.7 66.7-9.9 92.9-36.2s34.5-57.6 36.2-92.9c2-34.9 2-139.9 0-174.8z" />
-                    </svg>
-                    Instagram
-                </button>
+                <button class="social-btn social-tg" onclick="tgBonus()">📢 Бародар Карго</button>
+                <button class="social-btn social-ig" onclick="igBonus()">📸 Instagram</button>
             </div>
         </div>
 
+        <!-- REFERRAL -->
+        <div class="ref-card">
+            <div class="ham-top">
+                <div class="ham-icon">👥</div>
+                <div>
+                    <div class="ham-title">Реферал</div>
+                    <div class="ham-reward">+500$ барои ҳар дӯст</div>
+                </div>
+            </div>
+            <input id="refLink" readonly>
+            <button class="social-btn social-tg" onclick="copyRef()">📋 Нусха гирифтан</button>
+        </div>
     </div>
 
     <!-- MENU -->
     <div class="menu">
         <button class="active" onclick="show('game',this)">🏠 Хона</button>
+        <button onclick="show('top',this)">🏆 Top рейтинг</button>
         <button onclick="show('bonus',this)">🎁 Бонусҳо</button>
     </div>
 
@@ -247,48 +317,75 @@
 
         let money = +localStorage.money || 0;
         const DAY = 86400000;
-
         const $ = id => document.getElementById(id);
-        function update() { $("money").innerText = money; localStorage.money = money; }
+        const SERVER = "https://YOUR_SERVER_URL"; // Нишонии сервер
+
+        function update() { $("money").innerText = money; localStorage.money = money; updateTopServer(); }
         update();
 
-        /* TAP */
-        $("car").onclick = () => {
-            money += 1;
-            navigator.vibrate?.(10);
-            update();
-        };
+        /* TAP CAR */
+        $("car").onclick = () => { money += 1; navigator.vibrate?.(10); update(); }
 
-        /* BONUSES */
-        function tgBonus() {
-            tg.openLink("https://t.me/barodarcargo");
-            money += 500;
-            localStorage.tgTime = Date.now();
+        /* 3 BOX DAILY BONUS */
+        let luckyBox;
+        function pickBox(i) {
+            let lastDaily = +localStorage.lastDaily || 0;
+            if (Date.now() - lastDaily < DAY) { alert("⏳ Имрӯз аллакай гирифтӣ бонуси ҳаррӯза!"); return; }
+            if (luckyBox === undefined) { luckyBox = Math.floor(Math.random() * 3); }
+            $("boxRow").querySelectorAll(".box").forEach((b, index) => {
+                b.style.background = index === luckyBox ? "#22c55e" : "#334155";
+                b.innerText = index === luckyBox ? "💰" : "❌";
+            });
+            if (i === luckyBox) { money += 500; alert("🎉 Дуруст! +500$!"); }
+            else { money += 200; alert("😅 Нодуруст! Аммо +200$!"); }
+            localStorage.lastDaily = Date.now();
             update();
+            luckyBox = undefined;
+            setTimeout(() => { $("boxRow").querySelectorAll(".box").forEach(b => { b.innerText = "❓"; b.style.background = "#1e293b" }) }, 2000);
         }
-        function igBonus() {
-            window.open("https://www.instagram.com/barodar_cargo?igsh=NmhpN2NnN2Fod2Fv", "_blank");
-            money += 500;
-            localStorage.igTime = Date.now();
-            update();
-        }
+
+        /* SOCIAL BONUS */
+        function tgBonus() { tg.openLink("https://t.me/barodarcargo"); money += 500; localStorage.tgTime = Date.now(); update(); }
+        function igBonus() { window.open("https://www.instagram.com/barodar_cargo?igsh=NmhpN2NnN2Fod2Fv", "_blank"); money += 500; localStorage.igTime = Date.now(); update(); }
 
         /* PROGRESS */
         function updateProg() {
             let last = Math.max(+localStorage.tgTime || 0, +localStorage.igTime || 0);
             let p = Math.min((Date.now() - last) / DAY * 100, 100);
             $("socialProg").style.width = p + "%";
-            if (p >= 100) $("socialCard").classList.add("glow");
-            else $("socialCard").classList.remove("glow");
+            if (p >= 100) $("socialCard").classList.add("glow"); else $("socialCard").classList.remove("glow");
         }
         setInterval(updateProg, 1000);
 
+        /* REFERRAL */
+        let uid = tg.initDataUnsafe?.user?.id || Math.floor(Math.random() * 999999);
+        let ref = "https://t.me/barodarcargo?start=" + uid;
+        $("refLink").value = ref;
+        function copyRef() { navigator.clipboard.writeText(ref); alert("📋 Линк нусха шуд"); }
+
         /* NAV */
-        function show(id, btn) {
-            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-            document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
-            $(id).classList.add("active");
-            btn.classList.add("active");
+        function show(id, btn) { document.querySelectorAll(".screen").forEach(s => s.classList.remove("active")); document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active")); $(id).classList.add("active"); btn.classList.add("active"); }
+
+        /* Top рейтинг воқеӣ бо сервер */
+        const USER_NAME = tg.initDataUnsafe?.user?.first_name || "Бозигар";
+
+        async function updateTopServer() {
+            try {
+                // POST навсозӣ
+                await fetch(SERVER + '/top', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: USER_NAME, money: money })
+                });
+
+                // GET рейтинг
+                const res = await fetch(SERVER + '/top');
+                const top = await res.json();
+                let html = '';
+                top.forEach(u => { html += `<li>${u.name} – ${u.money}$</li>`; });
+                $("topList").innerHTML = html;
+
+            } catch (e) { console.error(e); }
         }
     </script>
 

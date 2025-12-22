@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Tap Car – Бонусҳо ва Top рейтинг</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
     <style>
         * {
             margin: 0;
@@ -36,7 +35,6 @@
             display: flex
         }
 
-        /* Top рейтинг */
         .top-rating {
             width: 100%;
             padding: 16px;
@@ -59,7 +57,6 @@
             text-align: left
         }
 
-        /* Game */
         .balance {
             font-size: 22px;
             font-weight: 700;
@@ -76,7 +73,6 @@
             transform: scale(1.1)
         }
 
-        /* Card */
         .ham-card,
         .ref-card {
             width: 100%;
@@ -128,7 +124,6 @@
             opacity: .8
         }
 
-        /* Social */
         .social-row {
             display: flex;
             gap: 12px;
@@ -162,7 +157,6 @@
             background: linear-gradient(135deg, #ec4899, #f97316)
         }
 
-        /* Referral */
         .ref-card input {
             width: 100%;
             padding: 10px;
@@ -171,7 +165,6 @@
             margin-bottom: 10px
         }
 
-        /* Progress */
         .progress {
             width: 100%;
             height: 10px;
@@ -193,7 +186,6 @@
             box-shadow: 0 0 20px rgba(34, 197, 94, .6)
         }
 
-        /* 3 BOX BONUS */
         .box-row {
             display: flex;
             gap: 12px;
@@ -216,7 +208,6 @@
             background: #334155
         }
 
-        /* Menu */
         .menu {
             height: 60px;
             display: flex;
@@ -318,12 +309,12 @@
         let money = +localStorage.money || 0;
         const DAY = 86400000;
         const $ = id => document.getElementById(id);
-        const SERVER = "https://YOUR_SERVER_URL"; // Нишонии сервер
+        // Иваз кунед бо URL-и сервер онлайн (Replit/Render/Railway)
+        const SERVER = "https://html-assets--domentj.replit.appL";
 
         function update() { $("money").innerText = money; localStorage.money = money; updateTopServer(); }
-        update();
 
-        /* TAP CAR */
+        /* Tap Car */
         $("car").onclick = () => { money += 1; navigator.vibrate?.(10); update(); }
 
         /* 3 BOX DAILY BONUS */
@@ -371,22 +362,19 @@
 
         async function updateTopServer() {
             try {
-                // POST навсозӣ
                 await fetch(SERVER + '/top', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name: USER_NAME, money: money })
                 });
-
-                // GET рейтинг
                 const res = await fetch(SERVER + '/top');
                 const top = await res.json();
                 let html = '';
                 top.forEach(u => { html += `<li>${u.name} – ${u.money}$</li>`; });
                 $("topList").innerHTML = html;
-
             } catch (e) { console.error(e); }
         }
+        update();
     </script>
 
 </body>

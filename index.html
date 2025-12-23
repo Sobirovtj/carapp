@@ -40,14 +40,7 @@
             padding: 16px;
             background: #1e293b;
             border-radius: 16px;
-            margin-bottom: 16px;
             text-align: center
-        }
-
-        .top-rating h1 {
-            color: #22c55e;
-            font-size: 22px;
-            margin-bottom: 12px
         }
 
         .top-rating ol {
@@ -239,8 +232,10 @@
 
     <!-- TOP RATING SCREEN -->
     <div class="screen" id="top">
+        <!-- H1 мустақил ва марказӣ -->
+        <h1 style="color:#22c55e; text-align:center; margin-bottom:20px;">🏆 Рӯзҳои наздик</h1>
+
         <div class="top-rating">
-            <h1>🏆 Top рейтинг</h1>
             <ol id="topList"></ol>
         </div>
     </div>
@@ -309,7 +304,6 @@
         let money = +localStorage.money || 0;
         const DAY = 86400000;
         const $ = id => document.getElementById(id);
-        // Иваз кунед бо URL-и сервер онлайн (Replit/Render/Railway)
         const SERVER = "https://asset-indexer--domentj.replit.app";
 
         function update() { $("money").innerText = money; localStorage.money = money; updateTopServer(); }

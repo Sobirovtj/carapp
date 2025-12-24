@@ -4,66 +4,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Tap Car – Бонусҳо ва Top рейтинг</title>
+    <title>Tap Car – Full Game</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui
+            font-family: system-ui;
         }
 
         body {
-            height: 100vh;
+            min-height: 100vh;
             background: #020617;
             color: #fff;
             display: flex;
-            flex-direction: column
-        }
-
-        .screen {
-            flex: 1;
-            display: none;
-            align-items: center;
-            justify-content: flex-start;
             flex-direction: column;
-            padding: 16px
-        }
-
-        .screen.active {
-            display: flex
-        }
-
-        .top-rating {
-            width: 100%;
-            padding: 16px;
-            background: #1e293b;
-            border-radius: 16px;
-            text-align: center
-        }
-
-        .top-rating ol {
-            list-style: decimal;
-            padding-left: 20px;
-            color: #fff;
-            text-align: left
+            align-items: center;
+            overflow-x: hidden;
         }
 
         .balance {
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 700;
-            margin-bottom: 10px
+            margin: 12px 0;
+            text-align: center;
+            padding: 6px 14px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, .5);
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            width: 100%;
+            margin-top: 60px;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        .center-wrap {
+            position: relative;
+            width: 260px;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 6px solid rgba(34, 197, 94, .25);
+            animation: spin 6s linear infinite;
+        }
+
+        .ring::after {
+            content: "";
+            position: absolute;
+            inset: 12px;
+            border-radius: 50%;
+            border: 6px dashed rgba(34, 197, 94, .6);
         }
 
         .car {
-            font-size: 120px;
-            margin: 20px 0;
-            user-select: none
+            font-size: 110px;
+            z-index: 2;
+            cursor: pointer;
+            user-select: none;
+            transition: .15s;
         }
 
         .car:active {
-            transform: scale(1.1)
+            transform: scale(1.15);
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0)
+            }
+
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .money-fly {
+            position: absolute;
+            font-size: 24px;
+            animation: flyUp 1s ease-out forwards;
+            pointer-events: none;
+            text-shadow: 0 0 6px #ffd700, 0 0 12px #ffff00;
+        }
+
+        @keyframes flyUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1)
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.3);
+            }
         }
 
         .ham-card,
@@ -75,26 +130,20 @@
             padding: 18px;
             margin: 10px 0;
             box-shadow: 0 20px 40px rgba(0, 0, 0, .6);
-            animation: pop .35s ease
+            transition: transform .3s;
         }
 
-        @keyframes pop {
-            from {
-                transform: scale(.9);
-                opacity: 0
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1
-            }
+        .ham-card:hover,
+        .ref-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(34, 197, 94, .6);
         }
 
         .ham-top {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 10px
+            margin-bottom: 10px;
         }
 
         .ham-icon {
@@ -104,23 +153,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #22c55e
+            background: #22c55e;
         }
 
         .ham-title {
             font-size: 18px;
-            font-weight: 700
+            font-weight: 700;
         }
 
         .ham-reward {
             font-size: 14px;
-            opacity: .8
+            opacity: .8;
         }
 
-        .social-row {
+        .box-row {
             display: flex;
             gap: 12px;
-            margin-top: 12px
+            margin-top: 16px;
+        }
+
+        .box {
+            flex: 1;
+            padding: 20px;
+            background: #229ed9;
+            border-radius: 16px;
+            text-align: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+            background: #00ff77;
         }
 
         .social-btn {
@@ -131,31 +196,19 @@
             font-size: 15px;
             font-weight: 700;
             color: #fff;
+            cursor: pointer;
+            transition: .3s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            cursor: pointer
+            background: #229ed9;
         }
 
-        .social-btn:active {
-            transform: scale(.96)
-        }
-
-        .social-tg {
-            background: #229ED9
-        }
-
-        .social-ig {
-            background: linear-gradient(135deg, #ec4899, #f97316)
-        }
-
-        .ref-card input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            margin-bottom: 10px
+        .social-btn:hover {
+            background: #22c55e;
+            transform: scale(1.05);
+            box-shadow: 0 0 12px #22c55e;
         }
 
         .progress {
@@ -164,7 +217,7 @@
             background: #1e293b;
             border-radius: 10px;
             overflow: hidden;
-            margin-top: 10px
+            margin-top: 10px;
         }
 
         .progress span {
@@ -172,39 +225,51 @@
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, #22c55e, #16a34a);
-            transition: .3s
+            transition: .3s;
         }
 
         .glow {
-            box-shadow: 0 0 20px rgba(34, 197, 94, .6)
+            box-shadow: 0 0 20px rgba(34, 197, 94, .6);
         }
 
-        .box-row {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px
-        }
-
-        .box {
-            flex: 1;
-            padding: 20px;
+        .ref-card input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            margin-bottom: 10px;
             background: #1e293b;
-            border-radius: 16px;
-            text-align: center;
-            font-size: 24px;
-            cursor: pointer;
-            transition: 0.2s
+            color: #fff;
+            font-size: 14px;
         }
 
-        .box:hover {
+        .ref-card button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            border: none;
+            background: #229ed9;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .ref-card button:hover {
             transform: scale(1.05);
-            background: #334155
+            box-shadow: 0 0 12px #22c55e;
         }
 
         .menu {
-            height: 60px;
+            position: fixed;
+            bottom: 20px;
             display: flex;
-            border-top: 1px solid #334155
+            gap: 12px;
+            width: 90%;
+            max-width: 400px;
+            justify-content: space-between;
+            z-index: 10;
         }
 
         .menu button {
@@ -212,43 +277,78 @@
             background: none;
             border: none;
             color: #94a3b8;
-            font-size: 16px
+            font-size: 16px;
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.8);
         }
 
         .menu button.active {
-            color: #22c55e
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.2);
+        }
+
+        .top-box {
+            width: 100%;
+            max-width: 400px;
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .top-box ol {
+            padding-left: 20px;
+            color: #fff;
+            text-align: left;
+        }
+
+        button.energy-btn {
+            padding: 14px 20px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: none;
+            background: #ff9900;
+            color: #fff;
+            cursor: pointer;
+            transition: .3s;
+            margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- GAME SCREEN -->
-    <div class="screen active" id="game">
-        <div class="balance">💰 Баланс: <span id="money">0</span>$</div>
-        <div class="car" id="car">🚗</div>
-        <div style="opacity:.7">Тап кун → пул гир</div>
+    <!-- BALANCE -->
+    <div class="balance" id="balance">
+        💰 <span id="money">0</span> | ⚡ <span id="energy">0</span>
     </div>
 
-    <!-- TOP RATING SCREEN -->
-    <div class="screen" id="top">
-        <!-- H1 мустақил ва марказӣ -->
-        <h1 style="color:#22c55e; text-align:center; margin-bottom:20px;">🏆 Рӯзҳои наздик</h1>
+    <!-- GAME SCREEN -->
+    <div class="screen active" id="game">
+        <div class="center-wrap">
+            <div class="ring"></div>
+            <div class="car" id="car">🚗</div>
+        </div>
+        <div style="opacity:.7;margin-top:10px;">Тап кун → пул гир</div>
+        <button id="energyBtn" class="energy-btn">⚡ Энергия +1</button>
+    </div>
 
-        <div class="top-rating">
+    <!-- TOP SCREEN -->
+    <div class="screen" id="top">
+        <h1 style="color:#22c55e;text-align:center;margin-bottom:20px;">🏆 Top рейтинг</h1>
+        <div class="top-box">
             <ol id="topList"></ol>
         </div>
     </div>
 
     <!-- BONUS SCREEN -->
     <div class="screen" id="bonus">
-        <!-- DAILY BONUS 3 BOX -->
         <div class="ham-card">
             <div class="ham-top">
                 <div class="ham-icon">🎲</div>
                 <div>
                     <div class="ham-title">Бонуси Ҳаррӯза</div>
-                    <div class="ham-reward">Як хонача интихоб кунед, ки 500$ бурдед! (Як бор дар як рӯз)</div>
+                    <div class="ham-reward">Як хонача интихоб кунед, ки 500 Монета бурдед! (Як бор дар як рӯз)</div>
                 </div>
             </div>
             <div class="box-row" id="boxRow">
@@ -258,8 +358,7 @@
             </div>
         </div>
 
-        <!-- SOCIAL BONUS -->
-        <div class="ham-card" id="socialCard">
+        <div class="ham-card">
             <div class="ham-top">
                 <div class="ham-icon">🎁</div>
                 <div>
@@ -267,26 +366,23 @@
                     <div class="ham-reward">Бародар Карго + Instagram (24 соат)</div>
                 </div>
             </div>
-            <div class="progress">
-                <span id="socialProg"></span>
-            </div>
-            <div class="social-row">
-                <button class="social-btn social-tg" onclick="tgBonus()">📢 Бародар Карго</button>
-                <button class="social-btn social-ig" onclick="igBonus()">📸 Instagram</button>
+            <div class="progress"><span id="socialProg"></span></div>
+            <div class="box-row">
+                <button class="social-btn" onclick="tgBonus()">📢 Бародар Карго</button>
+                <button class="social-btn" onclick="igBonus()">📸 Instagram</button>
             </div>
         </div>
 
-        <!-- REFERRAL -->
         <div class="ref-card">
             <div class="ham-top">
                 <div class="ham-icon">👥</div>
                 <div>
                     <div class="ham-title">Реферал</div>
-                    <div class="ham-reward">+500$ барои ҳар дӯст</div>
+                    <div class="ham-reward">+500 Монета барои ҳар дӯст</div>
                 </div>
             </div>
             <input id="refLink" readonly>
-            <button class="social-btn social-tg" onclick="copyRef()">📋 Нусха гирифтан</button>
+            <button class="social-btn" onclick="copyRef()">📋 Нусха гирифтан</button>
         </div>
     </div>
 
@@ -298,79 +394,146 @@
     </div>
 
     <script>
-        const tg = Telegram.WebApp;
+        const tg = (window.Telegram && Telegram.WebApp) ? Telegram.WebApp : { expand: () => { }, initDataUnsafe: {} };
         tg.expand();
 
+        // ======== ДАННЫЕ И LOCALSTORAGE ========
+        if (!localStorage.uid) localStorage.uid = Math.floor(Math.random() * 999999);
+        let uid = localStorage.uid;
         let money = +localStorage.money || 0;
-        const DAY = 86400000;
+        let energy = +localStorage.energy || 0;
+        let lastDaily = +localStorage.lastDaily || 0;
+        let lastTg = +localStorage.tgTime || 0;
+        let lastIg = +localStorage.igTime || 0;
+        let lastRestore = +localStorage.lastRestore || Date.now();
+        const maxEnergy = 10;
+        const restoreTime = 30; // сек
+        const USER_NAME = tg.initDataUnsafe?.user?.first_name || "Бозигар";
+        const ref = "https://tapcar.fake/ref?uid=" + uid;
+
         const $ = id => document.getElementById(id);
-        const SERVER = "https://asset-indexer--domentj.replit.app";
+        if ($("refLink")) $("refLink").value = ref;
 
-        function update() { $("money").innerText = money; localStorage.money = money; updateTopServer(); }
-
-        /* Tap Car */
-        $("car").onclick = () => { money += 1; navigator.vibrate?.(10); update(); }
-
-        /* 3 BOX DAILY BONUS */
-        let luckyBox;
-        function pickBox(i) {
-            let lastDaily = +localStorage.lastDaily || 0;
-            if (Date.now() - lastDaily < DAY) { alert("⏳ Имрӯз аллакай гирифтӣ бонуси ҳаррӯза!"); return; }
-            if (luckyBox === undefined) { luckyBox = Math.floor(Math.random() * 3); }
-            $("boxRow").querySelectorAll(".box").forEach((b, index) => {
-                b.style.background = index === luckyBox ? "#22c55e" : "#334155";
-                b.innerText = index === luckyBox ? "💰" : "❌";
-            });
-            if (i === luckyBox) { money += 500; alert("🎉 Дуруст! +500$!"); }
-            else { money += 200; alert("😅 Нодуруст! Аммо +200$!"); }
-            localStorage.lastDaily = Date.now();
-            update();
-            luckyBox = undefined;
-            setTimeout(() => { $("boxRow").querySelectorAll(".box").forEach(b => { b.innerText = "❓"; b.style.background = "#1e293b" }) }, 2000);
+        function saveData() {
+            localStorage.money = money;
+            localStorage.energy = energy;
+            localStorage.lastDaily = lastDaily;
+            localStorage.tgTime = lastTg;
+            localStorage.igTime = lastIg;
+            localStorage.lastRestore = lastRestore;
         }
 
-        /* SOCIAL BONUS */
-        function tgBonus() { tg.openLink("https://t.me/barodarcargo"); money += 500; localStorage.tgTime = Date.now(); update(); }
-        function igBonus() { window.open("https://www.instagram.com/barodar_cargo?igsh=NmhpN2NnN2Fod2Fv", "_blank"); money += 500; localStorage.igTime = Date.now(); update(); }
+        function update() {
+            $("money").innerText = money;
+            $("energy").innerText = energy;
+            updateTop();
+            updateProg();
+            saveData();
+        }
 
-        /* PROGRESS */
+        // ======== TAP CAR ========
+        $("car")?.addEventListener("click", () => {
+            if (energy > 0) {
+                money += 2;
+                energy--;
+                animateFly("+2💰", $("car"), "#ffff00");
+            } else {
+                money++;
+                animateFly("+1💰", $("car"), "#ffeb3b");
+            }
+            navigator.vibrate?.(10);
+            update();
+        });
+
+        // ======== ENERGY BUTTON ========
+        $("energyBtn")?.addEventListener("click", () => {
+            if (energy >= maxEnergy) { alert("⚡ Энергия уже полная!"); return; }
+            energy++;
+            animateFly("+⚡1", $("energyBtn"), "#ff9900");
+            navigator.vibrate?.(20);
+            update();
+        });
+
+        // ======== ANIMATION ========
+        function animateFly(text, elem, color) {
+            const fly = document.createElement("div");
+            fly.className = "money-fly";
+            fly.innerText = text;
+            fly.style.color = color;
+            document.body.appendChild(fly);
+            const rect = elem.getBoundingClientRect();
+            fly.style.left = (rect.left + rect.width / 2 - 20) + "px";
+            fly.style.top = (rect.top - 30) + "px";
+            setTimeout(() => fly.remove(), 1000);
+        }
+
+        // ======== DAILY BONUS ========
+        let luckyBox;
+        window.pickBox = (i) => {
+            if (Date.now() - lastDaily < 86400000) { alert("⏳ Имрӯз аллакай гирифтӣ бонуси ҳаррӯза!"); return; }
+            if (luckyBox !== undefined) return;
+            luckyBox = Math.floor(Math.random() * 3);
+            $("boxRow").querySelectorAll(".box").forEach((b, index) => { b.style.background = index === luckyBox ? "#22c55e" : "#334155"; b.innerText = index === luckyBox ? "💰" : "❌"; });
+            money += (i === luckyBox ? 500 : 200);
+            alert(i === luckyBox ? "🎉 Дуруст! +500 Монета!" : "😅 Нодуруст! Аммо +200 Монета!");
+            lastDaily = Date.now(); update();
+            setTimeout(() => { $("boxRow").querySelectorAll(".box").forEach(b => { b.innerText = "❓"; b.style.background = "#1e293b"; }); luckyBox = undefined; }, 2000);
+        }
+
+        // ======== SOCIAL BONUS ========
+        window.tgBonus = () => { window.open("https://t.me/barodarcargo", "_blank"); money += 500; lastTg = Date.now(); update(); }
+        window.igBonus = () => { window.open("https://www.instagram.com/barodar_cargo", "_blank"); money += 500; lastIg = Date.now(); update(); }
+
+        // ======== PROGRESS BAR ========
         function updateProg() {
-            let last = Math.max(+localStorage.tgTime || 0, +localStorage.igTime || 0);
-            let p = Math.min((Date.now() - last) / DAY * 100, 100);
-            $("socialProg").style.width = p + "%";
-            if (p >= 100) $("socialCard").classList.add("glow"); else $("socialCard").classList.remove("glow");
+            let last = Math.max(lastTg, lastIg);
+            let prog = Math.min((Date.now() - last) / 86400000 * 100, 100);
+            $("socialProg").style.width = prog + "%";
+            $("socialProg").style.transition = "width 1s ease";
+            $("socialProg").parentElement.classList.toggle("glow", (Date.now() - last) >= 86400000);
         }
         setInterval(updateProg, 1000);
 
-        /* REFERRAL */
-        let uid = tg.initDataUnsafe?.user?.id || Math.floor(Math.random() * 999999);
-        let ref = "https://t.me/barodarcargo?start=" + uid;
-        $("refLink").value = ref;
-        function copyRef() { navigator.clipboard.writeText(ref); alert("📋 Линк нусха шуд"); }
-
-        /* NAV */
-        function show(id, btn) { document.querySelectorAll(".screen").forEach(s => s.classList.remove("active")); document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active")); $(id).classList.add("active"); btn.classList.add("active"); }
-
-        /* Top рейтинг воқеӣ бо сервер */
-        const USER_NAME = tg.initDataUnsafe?.user?.first_name || "Бозигар";
-
-        async function updateTopServer() {
-            try {
-                await fetch(SERVER + '/top', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: USER_NAME, money: money })
-                });
-                const res = await fetch(SERVER + '/top');
-                const top = await res.json();
-                let html = '';
-                top.forEach(u => { html += `<li>${u.name} – ${u.money}$</li>`; });
-                $("topList").innerHTML = html;
-            } catch (e) { console.error(e); }
+        // ======== ENERGY RESTORE ========
+        function restoreEnergy() {
+            const now = Date.now();
+            const diff = Math.floor((now - lastRestore) / 1000);
+            if (diff >= restoreTime) {
+                const add = Math.floor(diff / restoreTime);
+                if (energy < maxEnergy) {
+                    energy = Math.min(energy + add, maxEnergy);
+                    lastRestore = now;
+                    update();
+                }
+            }
         }
+        setInterval(restoreEnergy, 1000);
+
+        // ======== REFERRAL ========
+        window.copyRef = () => { navigator.clipboard.writeText(ref); alert("📋 Линк нусха шуд"); }
+
+        // ======== NAVIGATION ========
+        window.show = (id, btn) => {
+            document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".menu button").forEach(b => b.classList.remove("active"));
+            $(id).classList.add("active"); btn.classList.add("active");
+            $("balance").style.display = id === "game" ? "flex" : "none";
+        }
+
+        // ======== TOP RATING ========
+        function updateTop() {
+            let topArr = [];
+            try { topArr = JSON.parse(localStorage.top || "[]"); } catch (e) { topArr = []; }
+            topArr = topArr.filter(u => u.name !== USER_NAME);
+            topArr.unshift({ name: USER_NAME, money: money });
+            topArr.sort((a, b) => b.money - a.money);
+            topArr = topArr.slice(0, 10);
+            localStorage.top = JSON.stringify(topArr);
+            $("topList").innerHTML = topArr.map((u, i) => `<li>${i + 1}. ${u.name} – ${u.money} Монета</li>`).join("");
+        }
+
         update();
     </script>
-
 </body>
 
 </html>

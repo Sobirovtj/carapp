@@ -5,11 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCOIN Premium 2025</title>
-
-    <!-- SDK для работы с Telegram и Firebase -->
     <script src="telegram.org"></script>
-    <script src="www.gstatic.com"></script>
-    <script src="www.gstatic.com"></script>
 
     <style>
         :root {
@@ -76,12 +72,16 @@
             padding-bottom: 60px;
         }
 
+        .balance-box {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
         #balance {
             font-size: 58px;
             font-weight: 900;
             color: var(--primary);
             text-shadow: 0 0 30px rgba(250, 204, 21, 0.4);
-            margin-bottom: 5px;
         }
 
         .coin-wrapper {
@@ -113,6 +113,28 @@
             transform: scale(0.94);
         }
 
+        .plus-one {
+            position: absolute;
+            color: var(--primary);
+            font-size: 30px;
+            font-weight: 900;
+            pointer-events: none;
+            animation: floatUp 0.7s ease-out forwards;
+            z-index: 100;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-130px);
+                opacity: 0;
+            }
+        }
+
         .screen {
             display: none;
             position: absolute;
@@ -126,6 +148,49 @@
             overflow-y: auto;
         }
 
+        .task-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .task-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .task-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .btn-action {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-action:disabled {
+            background: #333;
+            color: #666;
+            cursor: default;
+        }
+
         .footer {
             position: fixed;
             bottom: 0;
@@ -137,6 +202,29 @@
             z-index: 30;
         }
 
+        .energy-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        #energyFill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #facc15, #fbbf24);
+            transition: width 0.2s;
+        }
+
         .nav {
             display: flex;
             justify-content: space-around;
@@ -146,7 +234,6 @@
             text-align: center;
             color: #555;
             cursor: pointer;
-            flex: 1;
         }
 
         .nav-item.active {
@@ -159,7 +246,10 @@
             margin-top: 4px;
         }
 
-        /* Styles for Ranking */
+        tr.top-user {
+            background: rgba(250, 204, 21, 0.1);
+        }
+
         .rank-badge {
             width: 24px;
             height: 24px;
@@ -185,161 +275,275 @@
             background: #cd7f32;
             color: #000;
         }
-
-        .plus-one {
-            position: absolute;
-            color: var(--primary);
-            font-size: 30px;
-            font-weight: 900;
-            pointer-events: none;
-            animation: floatUp 0.7s ease-out forwards;
-            z-index: 100;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(-130px);
-                opacity: 0;
-            }
-        }
     </style>
 </head>
 
 <body>
 
     <div class="header">
-        <div class="stat-card"><span>Фоида</span><b id="profitHeader">+0</b></div>
-        <div class="stat-card"><span>Рейтинг</span><b id="user-rank-pos">...</b></div>
+        <div class="stat-card"><span>Фоида дар як соат</span><b id="profitHeader">+0</b></div>
+        <div class="stat-card"><span>Дараҷа</span><b id="rank">БРОНЗА</b></div>
     </div>
 
-    <!-- Основной экран -->
     <div id="main-screen">
-        <div id="balance">0</div>
-        <div style="color:#666;font-size:14px;letter-spacing:4px;font-weight:900;margin-bottom:30px;">MCOIN</div>
+        <div class="balance-box">
+            <div id="balance">0</div>
+            <div style="color:#666;font-size:14px;letter-spacing:4px;font-weight:900;">MCOIN</div>
+        </div>
         <div class="coin-wrapper">
             <div class="coin" id="tapBtn">M</div>
         </div>
     </div>
 
-    <!-- Экран Рейтинга -->
+    <div id="friends-screen" class="screen">
+        <h2 style="color:var(--primary)">👥 Вазифаҳо ва Дӯстон</h2>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#0088cc">✈️</div>
+                <div><b>Telegram Channel</b><br><span style="color:var(--primary)">+5,000 M</span></div>
+            </div>
+            <button id="task-tg" class="btn-action" onclick="doTask('t.me/mcointj', 5000)">Иҷро</button>
+        </div>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#e1306c">📸</div>
+                <div><b>Instagram</b><br><span style="color:var(--primary)">+5,000 M</span></div>
+            </div>
+            <button id="task-ig" class="btn-action" onclick="doTask('ig', 5000)">Иҷро</button>
+        </div>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#ff9900">🔥</div>
+                <div><b>Partner Project</b><br><span style="color:var(--primary)">+10,000 M</span></div>
+            </div>
+            <button id="task-p1" class="btn-action"
+                onclick="doTask('p1', 10000,'https://t.me/barodarcargo')">Иҷро</button>
+        </div>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#5865F2">💎</div>
+                <div><b>Crypto Community</b><br><span style="color:var(--primary)">+7,000 M</span></div>
+            </div>
+            <button id="task-p2" class="btn-action"
+                onclick="doTask('p2', 7000,'https://www.instagram.com/barodar_cargo')">Иҷро</button>
+        </div>
+
+        <button onclick="inviteFriend()"
+            style="background: var(--primary); color: #000; border: none; padding:16px; border-radius:14px; width:100%; font-weight:800; font-size:16px; margin-top:20px; cursor:pointer;">🔗
+            Даъвати дӯстон</button>
+    </div>
+
+    <div id="mining-screen" class="screen">
+        <h2 style="color:var(--primary)">⛏️ Майнинг ва Буст</h2>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:linear-gradient(135deg,#facc15,#fbbf24);color:#000">⚡</div>
+                <div><b>Multitap (Ламс)</b><br><span id="tap-level-info" style="color:var(--primary)">+1 за ламс</span>
+                </div>
+            </div>
+            <button id="multitap-btn" class="btn-action" onclick="upgradeTap()">1,000 M</button>
+        </div>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#444">⚒️</div>
+                <div><b>Hamster Farm</b><br><span style="color:var(--primary)">+100 /соат</span></div>
+            </div>
+            <button class="btn-action" onclick="buyUpgrade(500,100)">500 M</button>
+        </div>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#444">⚡</div>
+                <div><b>GPU RTX 5090</b><br><span style="color:var(--primary)">+500 /соат</span></div>
+            </div>
+            <button class="btn-action" onclick="buyUpgrade(2000,500)">2,000 M</button>
+        </div>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#444">🏢</div>
+                <div><b>Mining Center</b><br><span style="color:var(--primary)">+2,000 /соат</span></div>
+            </div>
+            <button class="btn-action" onclick="buyUpgrade(10000,2000)">10,000 M</button>
+        </div>
+    </div>
+
+    <div id="airdrop-screen" class="screen">
+        <h2 style="color:var(--primary)">💎 Airdrop</h2>
+        <div class="stat-card" style="padding:30px;">
+            <p>Листинг дар биржаҳо: <b>Май 2026</b></p>
+            <p>Баланси шумо ба холҳо табдил дода мешавад.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="energy-info"><span>⚡ Энергия</span><span><span id="energyVal">500</span>/500</span></div>
+        <div class="progress-bar">
+            <div id="energyFill"></div>
+        </div>
+        <div class="nav">
+            <div class="nav-item active" onclick="showScreen('main', this)">🏠<span>Асосӣ</span></div>
+            <div class="nav-item" onclick="showScreen('mining', this)">⚒️<span>Майнинг</span></div>
+            <div class="nav-item" onclick="showScreen('friends', this)">👥<span>Дӯстон</span></div>
+            <div class="nav-item" onclick="showScreen('airdrop', this)">💎<span>Airdrop</span></div>
+            <div class="nav-item" onclick="showLeaderboard()">
+                <div style="font-size:20px;">🏆</div>
+                <span>Рейтинг</span>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        async function loadLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '<p style="text-align:center">Боргирӣ...</p>';
+
+            try {
+                // Замените URL на адрес вашего сервера
+                const response = await fetch('your-api-server.com');
+                const realLeaders = await response.json();
+
+                list.innerHTML = '';
+                realLeaders.forEach((player, index) => {
+                    list.innerHTML += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 15px 10px;">
+                        <span class="rank-badge ${index < 3 ? 'top' : ''}">${index + 1}</span>
+                    </td>
+                    <td style="font-weight: bold;">
+                        ${player.first_name} ${player.username ? '@' + player.username : ''}
+                    </td>
+                    <td style="text-align: right; padding: 10px; color: var(--primary);">
+                        ${player.balance.toLocaleString()} M
+                    </td>
+                </tr>
+            `;
+                });
+            } catch (e) {
+                list.innerHTML = '<p style="text-align:center; color:red">Хатогӣ ҳангоми боргирӣ</p>';
+            }
+        }
+
+        // Маълумоти намунавӣ барои рейтинг (дар оянда аз база меояд)
+        const leaders = [
+            { name: "Ali_Crypto", balance: "1,500,000" },
+            { name: "Daler_2025", balance: "1,250,000" },
+            { name: "Somon_M", balance: "980,000" },
+            { name: "Nigora_Fit", balance: "850,000" },
+            { name: "Jamshed_TJ", balance: "720,000" },
+            { name: "Siyovush", balance: "600,000" }
+        ];
+
+        function loadLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '';
+
+            leaders.forEach((user, index) => {
+                let rankClass = '';
+                if (index === 0) rankClass = 'gold';
+                else if (index === 1) rankClass = 'silver';
+                else if (index === 2) rankClass = 'bronze';
+
+                list.innerHTML += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 15px 10px;">
+                        <span class="rank-badge ${rankClass}">${index + 1}</span>
+                    </td>
+                    <td style="font-weight: bold;">${user.name}</td>
+                    <td style="text-align: right; padding: 10px; color: var(--primary); font-weight: bold;">
+                        ${user.balance} M
+                    </td>
+                </tr>
+            `;
+            });
+        }
+
+        // Барои кушодани экран ин функсияро истифода баред
+        function showLeaderboard() {
+            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+            document.getElementById('leaderboard-screen').style.display = 'block';
+            loadLeaderboard();
+        }
+        const tg = window.Telegram?.WebApp; tg?.expand();
+
+        let balance = parseFloat(localStorage.getItem("mc_bal")) || 0;
+        let energy = parseInt(localStorage.getItem("mc_eng")) || 500;
+        let pph = parseFloat(localStorage.getItem("mc_pph")) || 0;
+        let completedTasks = JSON.parse(localStorage.getItem("mc_tasks")) || [];
+        let tapValue = 1;
+        let incomePerHour = 0;
+        const maxEnergy = 500;
+
+        function updateUI() {
+            document.getElementById("balance").textContent = Math.floor(balance).toLocaleString();
+            document.getElementById("energyVal").textContent = energy;
+            document.getElementById("energyFill").style.width = (energy / maxEnergy * 100) + "%";
+            document.getElementById("profitHeader").textContent = "+" + pph.toLocaleString();
+            completedTasks.forEach(id => {
+                const btn = document.getElementById("task-" + id);
+                if (btn) { btn.textContent = "Иҷро шуд"; btn.disabled = true; }
+            });
+            localStorage.setItem("mc_bal", balance);
+            localStorage.setItem("mc_eng", energy);
+            localStorage.setItem("mc_pph", pph);
+            localStorage.setItem("mc_tasks", JSON.stringify(completedTasks));
+        }
+
+        document.getElementById("tapBtn").addEventListener("pointerdown", (e) => {
+            if (energy <= 0) return;
+            balance += tapValue; energy--;
+            if (tg) tg.HapticFeedback.impactOccurred('light');
+            createPlusOne(e.clientX || e.touches?.[0]?.clientX, e.clientY || e.touches?.[0]?.clientY);
+            updateUI();
+        });
+
+        function createPlusOne(x, y) { const el = document.createElement("div"); el.className = "plus-one"; el.textContent = "+1"; el.style.left = (x - 15) + "px"; el.style.top = (y - 30) + "px"; document.body.appendChild(el); setTimeout(() => el.remove(), 700); }
+        function showScreen(id, btn) { document.querySelectorAll('.screen').forEach(s => s.style.display = 'none'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); if (id !== 'main') document.getElementById(id + '-screen').style.display = 'block'; btn.classList.add('active'); }
+
+        function doTask(id, reward, url) {
+            if (completedTasks.includes(id)) return;
+            window.open(url || "https://www.instagram.com/mcointj/?igsh=MTl3OHJkZXU3MXBtdw%3D%3D#", "_blank");
+            setTimeout(() => { balance += reward; completedTasks.push(id); updateUI(); }, 2000);
+        }
+
+        function buyUpgrade(cost, income) {
+            if (balance >= cost) { balance -= cost; incomePerHour += income; updateUI(); alert("Харид шуд!"); } else { alert("Маблағи кофӣ нест!"); }
+        }
+
+        function upgradeTap() { let cost = 1000; if (balance >= cost) { balance -= cost; tapValue += 1; updateUI(); alert("Харид шуд!"); } else { alert("Маблағи кофӣ нест!"); } }
+        function inviteFriend() { const inviteLink = "https://t.me/mcointj_bot"; const text = "🚀 Ба ман дар ин бозии нав ҳамроҳ шав ва тангаҳо ба даст ор!"; const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`; window.open(url, "_blank"); }
+
+        setInterval(() => { if (pph > 0) balance += (pph / 3600); if (energy < maxEnergy) energy++; updateUI(); }, 1000);
+        updateUI();
+
+    </script>
+    <!-- Экран рейтинга -->
     <div id="leaderboard-screen" class="screen">
-        <h2 style="color:var(--primary); text-align:center;">🏆 Топ Пешсафон</h2>
+        <h2 style="color:var(--primary); text-align: center;">🏆 Топ Пешсафон</h2>
+
         <div style="background: var(--card-bg); border-radius: 20px; padding: 10px;">
-            <table style="width: 100%; border-collapse: collapse;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="color: #666; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <th style="padding: 10px;">Ҷой</th>
+                        <th>Ном</th>
+                        <th style="text-align: right; padding: 10px;">Баланс</th>
+                    </tr>
+                </thead>
                 <tbody id="leaderboard-list">
-                    <!-- Сюда попадут данные из Firebase -->
+                    <!-- Рӯйхат тавассути JS пур карда мешавад -->
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="footer">
-        <div class="nav">
-            <div class="nav-item active" onclick="showScreen('main')">
-                <div style="font-size:20px;">🏠</div><span>Асосӣ</span>
-            </div>
-            <div class="nav-item" onclick="showScreen('rank')">
-                <div style="font-size:20px;">🏆</div><span>Рейтинг</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 1. Конфигурация Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyB8fWEo97uxh755lhEDXpAAf9xwQJJwtkc",
-            authDomain: "mcoin-7fd0d.firebaseapp.com",
-            projectId: "mcoin-7fd0d",
-            storageBucket: "mcoin-7fd0d.firebasestorage.app",
-            messagingSenderId: "318917293130",
-            appId: "1:318917293130:web:1b37059819fc0a5d0ba2b3"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-
-        // 2. Данные Telegram
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        const userId = tg.initDataUnsafe.user?.id || "guest";
-        const userName = tg.initDataUnsafe.user?.first_name || "Корбар";
-
-        let balance = parseInt(localStorage.getItem('mcoin_bal')) || 0;
-        document.getElementById('balance').innerText = balance.toLocaleString();
-
-        // 3. Клик
-        const tapBtn = document.getElementById('tapBtn');
-        tapBtn.addEventListener('click', (e) => {
-            balance++;
-            document.getElementById('balance').innerText = balance.toLocaleString();
-            localStorage.setItem('mcoin_bal', balance);
-
-            createPlusOne(e.pageX, e.pageY);
-            if (balance % 10 === 0) syncData(); // Сохраняем в облако каждые 10 кликов
-        });
-
-        function createPlusOne(x, y) {
-            const el = document.createElement('div');
-            el.className = 'plus-one';
-            el.style.left = x + 'px'; el.style.top = y + 'px';
-            el.innerText = '+1';
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 700);
-        }
-
-        // 4. Синхронизация с Firebase
-        async function syncData() {
-            await db.collection("users").doc(String(userId)).set({
-                name: userName,
-                balance: balance,
-                lastSeen: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-        }
-
-        // 5. Загрузка рейтинга
-        async function loadLeaderboard() {
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = '<p style="text-align:center">Боргирӣ...</p>';
-
-            const snapshot = await db.collection("users").orderBy("balance", "desc").limit(15).get();
-            list.innerHTML = '';
-            let i = 1;
-            snapshot.forEach(doc => {
-                const data = doc.data();
-                const badge = i == 1 ? 'gold' : i == 2 ? 'silver' : i == 3 ? 'bronze' : '';
-                list.innerHTML += `
-                    <tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
-                        <td style="padding:15px"><span class="rank-badge ${badge}">${i}</span></td>
-                        <td><b>${data.name}</b></td>
-                        <td style="text-align:right; color:var(--primary)">${data.balance.toLocaleString()}</td>
-                    </tr>`;
-                if (doc.id == userId) document.getElementById('user-rank-pos').innerText = "#" + i;
-                i++;
-            });
-        }
-
-        // 6. Навигация
-        function showScreen(type) {
-            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-            if (type === 'rank') {
-                document.getElementById('leaderboard-screen').style.display = 'block';
-                loadLeaderboard();
-                event.currentTarget.classList.add('active');
-            } else {
-                document.querySelector('.nav-item').classList.add('active');
-            }
-        }
-
-        // Первичная регистрация
-        syncData();
-    </script>
 </body>
 
 </html>

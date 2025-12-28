@@ -4,454 +4,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MCOIN GOLD EDITION 2025</title>
-    <!-- Подключаем SDK Телеграм -->
-    <script src="telegram.org"></script>
+    <title>MCOIN Premium 2025</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             --primary: #facc15;
-            --gold-linear: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #a16207 100%);
-            --bg: #030308;
-            --card: rgba(255, 255, 255, 0.05);
-            --glass: rgba(255, 255, 255, 0.08);
+            --secondary: #fbbf24;
+            --bg: #050510;
+            --card-bg: rgba(255, 255, 255, 0.07);
         }
 
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             margin: 0;
-            background: var(--bg);
-            background: radial-gradient(circle at center, #111122 0%, #030308 100%);
+            background: radial-gradient(circle at center, #1a1a3a 0%, var(--bg) 100%);
             color: #fff;
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            touch-action: none;
         }
 
-        /* КОНТЕЙНЕР ЭКРАНОВ */
-        .app-content {
-            flex: 1;
-            overflow-y: auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .screen {
-            display: none;
-            padding: 20px;
-            padding-bottom: 180px;
-            min-height: 100%;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .screen.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ВЕРХНЯЯ ПАНЕЛЬ */
+        /* Header Stats */
         .header {
+            padding: 15px;
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 12px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-card span {
+            font-size: 10px;
+            color: #aaa;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card b {
+            display: block;
+            font-size: 16px;
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        /* Main Game Screen */
+        #main-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .balance-box {
+            text-align: center;
             margin-bottom: 20px;
         }
 
-        .h-card {
-            background: var(--glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px;
-            border-radius: 15px;
-            text-align: center;
-        }
-
-        .h-card span {
-            font-size: 10px;
-            color: #888;
-            display: block;
-            text-transform: uppercase;
-        }
-
-        .h-card b {
-            color: var(--primary);
-            font-size: 14px;
-        }
-
-        /* БАЛАНС */
-        .balance-container {
-            text-align: center;
-            margin: 25px 0;
-        }
-
         #balance {
-            font-size: 64px;
+            font-size: 56px;
             font-weight: 900;
-            margin: 0;
-            background: var(--gold-linear);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.4));
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
         }
 
-        .league-name {
-            font-size: 14px;
-            color: #ccc;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 10px;
-        }
-
-        /* КЛИКЕР-ЗОНА */
-        .clicker-zone {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 40px 0;
-        }
-
-        .coin-btn {
+        .coin-container {
+            position: relative;
             width: 280px;
             height: 280px;
-            background: radial-gradient(circle at 35% 35%, #fde047 0%, #ca8a04 100%);
-            border-radius: 50%;
-            position: relative;
-            box-shadow: 0 0 60px rgba(250, 204, 21, 0.3), inset 0 0 20px rgba(255, 255, 255, 0.4);
-            border: 10px solid rgba(255, 255, 255, 0.05);
-            cursor: pointer;
-            transition: transform 0.05s ease;
         }
 
-        .coin-btn::after {
-            content: 'M';
-            font-size: 150px;
-            font-weight: 900;
-            color: rgba(0, 0, 0, 0.8);
+        .coin {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fde047, #ca8a04);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100%;
+            font-size: 140px;
+            font-weight: 900;
+            color: #222;
+            box-shadow: 0 0 50px rgba(250, 204, 21, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            position: relative;
+            z-index: 2;
         }
 
-        .coin-btn:active {
+        .coin:active {
             transform: scale(0.95);
         }
 
-        /* ФУТЕР И ЭНЕРГИЯ */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(5, 5, 15, 0.95);
-            backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 20px 35px;
-            z-index: 1000;
-        }
-
-        .energy-wrapper {
-            margin-bottom: 15px;
-        }
-
-        .energy-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-        .progress-bg {
-            height: 12px;
-            background: #1a1a2e;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .progress-fill {
-            height: 100%;
-            width: 100%;
-            background: var(--gold-linear);
-            transition: width 0.1s linear;
-        }
-
-        .nav {
-            display: flex;
-            justify-content: space-around;
-        }
-
-        .nav-item {
-            text-align: center;
-            color: #666;
-            font-size: 11px;
-            flex: 1;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-            transform: translateY(-3px);
-        }
-
-        .nav-item i {
-            font-size: 26px;
-            display: block;
-            margin-bottom: 4px;
-            font-style: normal;
-        }
-
-        /* АНИМАЦИЯ ЦИФР */
-        .pop-num {
+        /* Floating Animation */
+        .plus-one {
             position: absolute;
-            color: #fff;
-            font-size: 38px;
-            font-weight: 900;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 24px;
             pointer-events: none;
-            z-index: 2000;
-            animation: floatPop 0.8s ease-out forwards;
+            animation: floatUp 0.8s ease-out forwards;
+            z-index: 100;
         }
 
-        @keyframes floatPop {
+        @keyframes floatUp {
             0% {
-                transform: translateY(0) scale(1);
+                transform: translateY(0);
                 opacity: 1;
             }
 
             100% {
-                transform: translateY(-180px) scale(1.2);
+                transform: translateY(-100px);
                 opacity: 0;
             }
         }
 
-        /* ДРУЗЬЯ */
-        .f-list {
-            margin-top: 20px;
-        }
-
-        .f-item {
-            background: var(--card);
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .btn-main {
-            background: var(--gold-linear);
-            border: none;
-            padding: 18px;
-            border-radius: 16px;
+        /* Screens */
+        .screen {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            font-weight: 900;
-            font-size: 16px;
+            height: 100%;
+            background: var(--bg);
+            padding: 20px;
+            padding-bottom: 120px;
+            overflow-y: auto;
+            z-index: 20;
+        }
+
+        .screen h2 {
+            color: var(--primary);
+            border-bottom: 1px solid var(--card-bg);
+            padding-bottom: 10px;
+        }
+
+        /* Footer & Energy */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 20px;
+            background: rgba(5, 5, 16, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 30;
+        }
+
+        .energy-box {
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .progress {
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        #energyFill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 100%;
+            transition: width 0.3s;
+        }
+
+        .nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .nav-btn span {
+            display: block;
+            font-size: 10px;
+            margin-top: 4px;
+            color: #888;
+        }
+
+        /* Upgrade Button */
+        .btn-upgrade {
+            background: linear-gradient(90deg, #facc15, #ca8a04);
             color: #000;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(250, 204, 21, 0.2);
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="app-content">
-        <!-- ЭКРАНИ МАЙНИНГ -->
-        <div id="mine" class="screen active">
-            <div class="header">
-                <div class="h-card"><span>Ҳар як ламс</span><b>+1</b></div>
-                <div class="h-card"><span>Сатҳи нав</span><b>10,000</b></div>
-            </div>
+    <div class="header">
+        <div class="stat-card"><span>Фоида/соат</span><b id="profitHeader">+0</b></div>
+        <div class="stat-card"><span>Рутба</span><b id="rank">BRONZE</b></div>
+    </div>
 
-            <div class="balance-container">
-                <div style="color: var(--primary); font-weight: bold; font-size: 12px; letter-spacing: 2px;">MCOIN
-                    БАЛАНС</div>
-                <h1 id="balance">0</h1>
-                <div class="league-name">🏆 Нуқрагин (Silver)</div>
-            </div>
-
-            <div class="clicker-zone">
-                <div class="coin-btn" id="coin-trigger"></div>
-            </div>
+    <!-- Main Screen -->
+    <div id="main-screen">
+        <div class="balance-box">
+            <div id="balance">0</div>
+            <div style="color: #888; letter-spacing: 2px;">MCOIN</div>
         </div>
 
-        <!-- ЭКРАНИ ДӮСТОН -->
-        <div id="friends" class="screen">
-            <h1 style="text-align: center; margin: 0;">Дӯстон</h1>
-            <p style="text-align: center; color: #888;">Барои даъват бонуси тиллоӣ гиред!</p>
-
-            <div class="f-item" style="border-left: 4px solid var(--primary);">
-                <div><b>Дӯсти оддӣ</b><br><small style="color: #888;">+5,000 барои ҳар як</small></div>
-                <span style="font-size: 24px;">🎁</span>
-            </div>
-
-            <div class="f-item" style="border-left: 4px solid #0088cc;">
-                <div><b>Telegram Premium</b><br><small style="color: #888;">+25,000 барои ҳар як</small></div>
-                <span style="font-size: 24px;">👑</span>
-            </div>
-
-            <h3 style="margin-top: 30px;">Рӯйхати дӯстон (0)</h3>
-            <div style="text-align: center; color: #444; padding: 40px; border: 2px dashed #222; border-radius: 20px;">
-                Дӯстон ҳанӯз нестанд
-            </div>
-
-            <button class="btn-main" onclick="shareRef()">ДАЪВАТ КАРДАНИ ДӮСТ 👤+</button>
-        </div>
-
-        <!-- ЭКРАНИ AIRDROP -->
-        <div id="airdrop" class="screen">
-            <div style="text-align: center; padding-top: 60px;">
-                <div style="font-size: 100px;">💎</div>
-                <h1 style="
-    font-size: 48px;
-    font-weight: 900;
-    margin: 10px 0;
-    background: linear-gradient(180deg, #fef08a 0%, #facc15 50%, #a16207 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.5));
-">
-                    Airdrop
-                </h1>
-
-                <p style="color: #888; padding: 0 30px;">Листинг дар биржаҳо ба наздикӣ. Вазифаҳоро иҷро кунед ва холҳои
-                    худро зиёд кунед.</p>
-
-                <div class="h-card" style="max-width: 250px; margin: 40px auto;">
-                    <span>Ҳамёни TON</span>
-                    <b style="color: #ff4d4d;">Пайваст нашудааст</b>
-                </div>
-
-                <button class="btn-main" style="background: #2481cc; color: white;">Пайваст кардани ҳамён</button>
-            </div>
+        <div class="coin-container" id="tapBtn">
+            <div class="coin">M</div>
         </div>
     </div>
 
-    <!-- ФУТЕР (ДОИМӢ) -->
+    <!-- Other Screens -->
+    <div id="mining-screen" class="screen">
+        <h2>⛏️ Майнинг</h2>
+        <div class="stat-card" style="margin-bottom: 20px;">
+            <span>Суръати ҳозира</span>
+            <b id="p-hour">0</b>
+        </div>
+        <button class="btn-upgrade" onclick="buyUpgrade(500, 50)">⚙️ Харидани Таҷҳизот (500 M)</button>
+        <p style="color: #888; font-size: 12px;">Ҳар як таҷҳизот ба шумо +50 танга дар як соат меорад.</p>
+    </div>
+
+    <div id="friends-screen" class="screen">
+        <h2>👥 Дӯстон</h2>
+        <p>Дӯстони худро даъват кунед ва 10% аз даромади онҳоро гиред!</p>
+        <button class="btn-upgrade" onclick="inviteFriend()">🔗 Нусхабардории истинод</button>
+    </div>
+
+    <div id="airdrop-screen" class="screen">
+        <h2>💎 Airdrop</h2>
+        <div class="stat-card">
+            <p>Listing ба наздикӣ дар биржаҳо!</p>
+            <b style="font-size: 12px;">Марҳилаи 1: Ҷамъоварии холҳо</b>
+        </div>
+    </div>
+
+    <!-- Footer Navigation -->
     <div class="footer">
-        <div id="energy-box">
-            <div class="energy-info">
-                <span>⚡ <span id="energy-num">1000</span> / 1000</span>
-                <span style="color: var(--primary);">Boost 🚀</span>
-            </div>
-            <div class="progress-bg">
-                <div class="progress-fill" id="energy-bar"></div>
+        <div class="energy-box">
+            ⚡ <span id="energyVal">500</span> / 500
+            <div class="progress">
+                <div id="energyFill"></div>
             </div>
         </div>
 
         <div class="nav">
-            <div class="nav-item active" onclick="tab('mine', this)"><i>⛏️</i>Майнинг</div>
-            <div class="nav-item" onclick="tab('friends', this)"><i>👥</i>Дӯстон</div>
-            <div class="nav-item" onclick="tab('airdrop', this)"><i>💎</i>Airdrop</div>
+            <div class="nav-btn" onclick="showScreen('main')">🏠<span>Асосӣ</span></div>
+            <div class="nav-btn" onclick="showScreen('mining')">⛏️<span>Майнинг</span></div>
+            <div class="nav-btn" onclick="showScreen('friends')">👥<span>Дӯстон</span></div>
+            <div class="nav-btn" onclick="showScreen('airdrop')">💎<span>Airdrop</span></div>
         </div>
     </div>
 
     <script>
-        // ИНИЦИАЛИЗАЦИЯ
-        let coins = Number(localStorage.getItem('m_coins_v3')) || 0;
-        let energy = 1000;
-        const maxEnergy = 1000;
+        const tg = window.Telegram?.WebApp;
+        tg?.expand();
+        if (tg) tg.headerColor = "#050510";
 
-        const balanceDisplay = document.getElementById('balance');
-        const energyNum = document.getElementById('energy-num');
-        const energyBar = document.getElementById('energy-bar');
-        const trigger = document.getElementById('coin-trigger');
+        // Game State
+        let balance = parseFloat(localStorage.getItem("mcoin_bal")) || 0;
+        let energy = parseInt(localStorage.getItem("mcoin_eng")) || 500;
+        let profitPerHour = parseFloat(localStorage.getItem("mcoin_pph")) || 0;
+        const maxEnergy = 500;
 
-        function updateStorage() {
-            balanceDisplay.innerText = coins.toLocaleString();
-            energyNum.innerText = energy;
-            energyBar.style.width = (energy / maxEnergy * 100) + '%';
-            localStorage.setItem('m_coins_v3', coins);
+        // UI Elements
+        const balanceEl = document.getElementById("balance");
+        const energyVal = document.getElementById("energyVal");
+        const energyFill = document.getElementById("energyFill");
+        const profitHeader = document.getElementById("profitHeader");
+        const phourEl = document.getElementById("p-hour");
+
+        function updateUI() {
+            balanceEl.textContent = Math.floor(balance).toLocaleString();
+            energyVal.textContent = energy;
+            energyFill.style.width = (energy / maxEnergy * 100) + "%";
+            profitHeader.textContent = "+" + (profitPerHour >= 1000 ? (profitPerHour / 1000).toFixed(1) + "K" : profitPerHour);
+            phourEl.textContent = profitPerHour;
+
+            localStorage.setItem("mcoin_bal", balance);
+            localStorage.setItem("mcoin_eng", energy);
+            localStorage.setItem("mcoin_pph", profitPerHour);
         }
 
-        // ОБРАБОТКА МУЛЬТИТАЧА
-        trigger.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const touches = e.changedTouches;
+        // Tap Logic
+        document.getElementById("tapBtn").addEventListener("pointerdown", (e) => {
+            if (energy <= 0) return;
 
-            for (let i = 0; i < touches.length; i++) {
-                if (energy > 0) {
-                    coins += 1;
-                    energy -= 1;
-                    spawnNum(touches[i].pageX, touches[i].pageY);
-                }
-            }
-            updateStorage();
+            // Update data
+            balance += 1;
+            energy -= 1;
+
+            // Haptic feedback
+            if (tg) tg.HapticFeedback.impactOccurred('medium');
+
+            // Floating +1
+            const rect = e.target.getBoundingClientRect();
+            const x = e.clientX || e.touches[0].clientX;
+            const y = e.clientY || e.touches[0].clientY;
+
+            createFloatingText(x, y);
+            updateUI();
         });
 
-        // АНИМАЦИЯ +1
-        function spawnNum(x, y) {
-            const el = document.createElement('div');
-            el.className = 'pop-num';
-            el.innerText = '+1';
-            el.style.left = (x - 20) + 'px';
-            el.style.top = (y - 50) + 'px';
+        function createFloatingText(x, y) {
+            const el = document.createElement("div");
+            el.className = "plus-one";
+            el.textContent = "+1";
+            el.style.left = x + "px";
+            el.style.top = y + "px";
             document.body.appendChild(el);
             setTimeout(() => el.remove(), 800);
         }
 
-        // НАВИГАЦИЯ
-        function tab(id, el) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-
-            // Прячем энергию если не майнинг
-            document.getElementById('energy-box').style.display = (id === 'mine') ? 'block' : 'none';
+        // Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+            if (screenId !== 'main') {
+                document.getElementById(screenId + '-screen').style.display = 'block';
+            }
         }
 
-        // РЕГЕНЕРАЦИЯ ЭНЕРГИИ
-        setInterval(() => {
-            if (energy < maxEnergy) {
-                energy += 1;
-                updateStorage();
-            }
-        }, 1500);
-
-        function shareRef() {
-            const url = "t.me";
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.openTelegramLink(url);
+        // Upgrades
+        function buyUpgrade(cost, profit) {
+            if (balance >= cost) {
+                balance -= cost;
+                profitPerHour += profit;
+                updateUI();
+                if (tg) tg.showAlert("Шумо таҷҳизоти нав харидед!");
             } else {
-                alert("Истинод нусхабардорӣ шуд!");
+                if (tg) tg.showAlert("Маблағи кофӣ нест!");
             }
         }
 
-        // ТЕЛЕГРАМ НАСТРОЙКИ
-        if (window.Telegram && window.Telegram.WebApp) {
-            const tg = window.Telegram.WebApp;
-            tg.expand();
-            tg.headerColor = "#030308";
-            tg.backgroundColor = "#030308";
+        function inviteFriend() {
+            const text = "Ба бозии MCOIN ҳамроҳ шав ва пул кор кун!";
+            const url = `t.me{tg?.initDataUnsafe?.user?.id || '123'}`;
+            window.open(`t.me{encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
         }
 
-        updateStorage();
+        // Game Loop (Passive Income & Energy Recovery)
+        setInterval(() => {
+            // Passive income (per second)
+            if (profitPerHour > 0) {
+                balance += (profitPerHour / 3600);
+            }
+            // Energy recovery
+            if (energy < maxEnergy) {
+                energy++;
+            }
+            updateUI();
+        }, 1000);
+
+        updateUI();
     </script>
 </body>
 

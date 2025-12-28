@@ -4,13 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MCOIN Premium</title>
+    <title>MCOIN Premium 2025</title>
     <script src="telegram.org"></script>
     <style>
         :root {
             --primary: #facc15;
             --bg: #050510;
-            --card-bg: rgba(255, 255, 255, 0.07);
+            --card-bg: rgba(255, 255, 255, 0.08);
         }
 
         * {
@@ -30,7 +30,7 @@
             flex-direction: column;
         }
 
-        /* Шапка */
+        /* Header */
         .header {
             padding: 15px;
             display: grid;
@@ -48,12 +48,12 @@
             border-radius: 14px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
         }
 
         .stat-card span {
             font-size: 10px;
-            color: #888;
+            color: #aaa;
             text-transform: uppercase;
         }
 
@@ -63,17 +63,14 @@
             color: var(--primary);
         }
 
-        /* Главный экран - Центровка монеты */
+        /* Main Screen - Центровка монеты */
         #main-screen {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            /* Центр по вертикали */
             align-items: center;
-            /* Центр по горизонтали */
-            padding-bottom: 80px;
-            /* Компенсация для меню */
+            padding-bottom: 60px;
         }
 
         .balance-box {
@@ -82,10 +79,10 @@
         }
 
         #balance {
-            font-size: 54px;
+            font-size: 58px;
             font-weight: 900;
             color: var(--primary);
-            text-shadow: 0 0 30px rgba(250, 204, 21, 0.3);
+            text-shadow: 0 0 30px rgba(250, 204, 21, 0.4);
         }
 
         .coin-wrapper {
@@ -111,18 +108,16 @@
             box-shadow: 0 0 60px rgba(250, 204, 21, 0.3);
             cursor: pointer;
             transition: transform 0.05s ease;
-            z-index: 2;
         }
 
         .coin:active {
-            transform: scale(0.92);
+            transform: scale(0.94);
         }
 
-        /* Анимация +1 */
         .plus-one {
             position: absolute;
             color: var(--primary);
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 900;
             pointer-events: none;
             animation: floatUp 0.7s ease-out forwards;
@@ -136,12 +131,12 @@
             }
 
             100% {
-                transform: translateY(-120px);
+                transform: translateY(-130px);
                 opacity: 0;
             }
         }
 
-        /* Экраны меню */
+        /* Screens */
         .screen {
             display: none;
             position: absolute;
@@ -150,17 +145,61 @@
             width: 100%;
             height: 100%;
             background: var(--bg);
-            padding: 100px 20px 120px 20px;
+            padding: 90px 20px 140px 20px;
             z-index: 15;
             overflow-y: auto;
         }
 
-        /* Футер и Энергия */
+        /* Cards (Tasks & Upgrades) */
+        .task-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .task-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .task-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .btn-action {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-action:disabled {
+            background: #333;
+            color: #666;
+            cursor: default;
+        }
+
+        /* Footer */
         .footer {
             position: fixed;
             bottom: 0;
             width: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(5, 5, 16, 0.95);
             backdrop-filter: blur(15px);
             padding: 15px 20px 25px 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -170,13 +209,13 @@
         .energy-info {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
+            font-size: 13px;
             margin-bottom: 8px;
             font-weight: bold;
         }
 
         .progress-bar {
-            height: 10px;
+            height: 8px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
@@ -197,8 +236,7 @@
 
         .nav-item {
             text-align: center;
-            font-size: 22px;
-            color: #666;
+            color: #555;
             cursor: pointer;
         }
 
@@ -211,81 +249,93 @@
             font-size: 10px;
             margin-top: 4px;
         }
-
-        .btn-action {
-            background: var(--primary);
-            color: #000;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            width: 100%;
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: 20px;
-        }
     </style>
 </head>
 
 <body>
 
     <div class="header">
-        <div class="stat-card">
-            <span>Фоида/соат</span>
-            <b id="profitHeader">+0</b>
-        </div>
-        <div class="stat-card">
-            <span>Рутба</span>
-            <b id="rank">BRONZE</b>
-        </div>
+        <div class="stat-card"><span>Profit/Hour</span><b id="profitHeader">+0</b></div>
+        <div class="stat-card"><span>Rank</span><b id="rank">BRONZE</b></div>
     </div>
 
-    <!-- Основной экран -->
+    <!-- Main Screen -->
     <div id="main-screen">
         <div class="balance-box">
             <div id="balance">0</div>
-            <div style="color: #888; font-size: 14px; letter-spacing: 3px;">MCOIN</div>
+            <div style="color: #666; font-size: 14px; letter-spacing: 4px; font-weight: 900;">MCOIN</div>
         </div>
-
         <div class="coin-wrapper">
             <div class="coin" id="tapBtn">M</div>
         </div>
     </div>
 
-    <!-- Другие экраны -->
-    <div id="mining-screen" class="screen">
-        <h2>⛏️ Майнинг</h2>
-        <div class="stat-card">
-            <span>Даромади ҷорӣ</span>
-            <b id="p-hour">0</b>
-        </div>
-        <button class="btn-action" onclick="buyUpgrade(500, 50)">⚒️ Харидани Таҷҳизот (500)</button>
-    </div>
-
+    <!-- Friends Screen -->
     <div id="friends-screen" class="screen">
-        <h2>👥 Дӯстон</h2>
-        <p>Барои ҳар як дӯст +5,000 MCOIN бонус гиред!</p>
-        <button class="btn-action" onclick="inviteFriend()">🔗 Даъват кардан</button>
-    </div>
-
-    <div id="airdrop-screen" class="screen">
-        <h2>💎 Airdrop</h2>
-        <p>Listing ба наздикӣ дар биржаҳои DEX!</p>
-        <div class="stat-card">Status: Coming Soon</div>
-    </div>
-
-    <!-- Навигация и Энергия -->
-    <div class="footer">
-        <div class="energy-info">
-            <span>⚡ Энергия</span>
-            <span><span id="energyVal">500</span>/500</span>
+        <h2 style="color: var(--primary);">👥 Вазифаҳо ва Дӯстон</h2>
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background: #0088cc;">✈️</div>
+                <div><b>Telegram Channel</b><br><span style="color:var(--primary)">+5,000 M</span></div>
+            </div>
+            <button id="task-tg" class="btn-action" onclick="doTask('tg', 't.me', 5000)">Иҷро</button>
         </div>
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background: #e1306c;">📸</div>
+                <div><b>Instagram</b><br><span style="color:var(--primary)">+5,000 M</span></div>
+            </div>
+            <button id="task-ig" class="btn-action" onclick="doTask('ig', 'instagram.com', 5000)">Иҷро</button>
+        </div>
+        <button onclick="inviteFriend()"
+            style="background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 14px; width: 100%; font-weight: 800; font-size: 16px; margin-top: 20px;">🔗
+            Даъвати дӯстон</button>
+    </div>
+
+    <!-- Mining Screen (ПОЛНОСТЬЮ РАБОЧИЙ) -->
+    <div id="mining-screen" class="screen">
+        <h2 style="color: var(--primary);">⛏️ Майнинг</h2>
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background: #444;">⚒️</div>
+                <div><b>Hamster Farm</b><br><span style="color:var(--primary)">+100 /соат</span></div>
+            </div>
+            <button class="btn-action" onclick="buyUpgrade(500, 100)">500 M</button>
+        </div>
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background: #444;">⚡</div>
+                <div><b>GPU RTX 5090</b><br><span style="color:var(--primary)">+500 /соат</span></div>
+            </div>
+            <button class="btn-action" onclick="buyUpgrade(2000, 500)">2,000 M</button>
+        </div>
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background: #444;">🏢</div>
+                <div><b>Mining Center</b><br><span style="color:var(--primary)">+2,000 /соат</span></div>
+            </div>
+            <button class="btn-action" onclick="buyUpgrade(10000, 2000)">10,000 M</button>
+        </div>
+    </div>
+
+    <!-- Airdrop Screen -->
+    <div id="airdrop-screen" class="screen">
+        <h2 style="color: var(--primary);">💎 Airdrop</h2>
+        <div class="stat-card" style="padding: 30px;">
+            <p>Листинг дар биржаҳо: <b>Май 2026</b></p>
+            <p>Баланси шумо ба холҳо табдил дода мешавад.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="energy-info"><span>⚡ Энергия</span><span><span id="energyVal">500</span>/500</span></div>
         <div class="progress-bar">
             <div id="energyFill"></div>
         </div>
-
         <div class="nav">
             <div class="nav-item active" onclick="showScreen('main', this)">🏠<span>Асосӣ</span></div>
-            <div class="nav-item" onclick="showScreen('mining', this)">⛏️<span>Майнинг</span></div>
+            <div class="nav-item" onclick="showScreen('mining', this)">⚒️<span>Майнинг</span></div>
             <div class="nav-item" onclick="showScreen('friends', this)">👥<span>Дӯстон</span></div>
             <div class="nav-item" onclick="showScreen('airdrop', this)">💎<span>Airdrop</span></div>
         </div>
@@ -298,48 +348,38 @@
         let balance = parseFloat(localStorage.getItem("mc_bal")) || 0;
         let energy = parseInt(localStorage.getItem("mc_eng")) || 500;
         let pph = parseFloat(localStorage.getItem("mc_pph")) || 0;
+        let completedTasks = JSON.parse(localStorage.getItem("mc_tasks")) || [];
         const maxEnergy = 500;
 
-        const balanceEl = document.getElementById("balance");
-        const energyVal = document.getElementById("energyVal");
-        const energyFill = document.getElementById("energyFill");
-        const profitHeader = document.getElementById("profitHeader");
-
         function updateUI() {
-            balanceEl.textContent = Math.floor(balance).toLocaleString();
-            energyVal.textContent = energy;
-            energyFill.style.width = (energy / maxEnergy * 100) + "%";
-            profitHeader.textContent = "+" + (pph >= 1000 ? (pph / 1000).toFixed(1) + "K" : pph);
-            document.getElementById("p-hour").textContent = pph;
+            document.getElementById("balance").textContent = Math.floor(balance).toLocaleString();
+            document.getElementById("energyVal").textContent = energy;
+            document.getElementById("energyFill").style.width = (energy / maxEnergy * 100) + "%";
+            document.getElementById("profitHeader").textContent = "+" + pph.toLocaleString();
+
+            completedTasks.forEach(id => {
+                const btn = document.getElementById("task-" + id);
+                if (btn) { btn.textContent = "Иҷро шуд"; btn.disabled = true; }
+            });
 
             localStorage.setItem("mc_bal", balance);
             localStorage.setItem("mc_eng", energy);
             localStorage.setItem("mc_pph", pph);
+            localStorage.setItem("mc_tasks", JSON.stringify(completedTasks));
         }
 
-        // Клик по монете
         document.getElementById("tapBtn").addEventListener("pointerdown", (e) => {
             if (energy <= 0) return;
-
-            balance += 1;
-            energy -= 1;
-
+            balance += 1; energy -= 1;
             if (tg) tg.HapticFeedback.impactOccurred('light');
-
-            // Анимация +1
-            const x = e.clientX || e.touches[0].clientX;
-            const y = e.clientY || e.touches[0].clientY;
-            createPlusOne(x, y);
-
+            createPlusOne(e.clientX || e.touches.clientX, e.clientY || e.touches.clientY);
             updateUI();
         });
 
         function createPlusOne(x, y) {
             const el = document.createElement("div");
-            el.className = "plus-one";
-            el.textContent = "+1";
-            el.style.left = (x - 10) + "px";
-            el.style.top = (y - 20) + "px";
+            el.className = "plus-one"; el.textContent = "+1";
+            el.style.left = (x - 15) + "px"; el.style.top = (y - 30) + "px";
             document.body.appendChild(el);
             setTimeout(() => el.remove(), 700);
         }
@@ -347,11 +387,18 @@
         function showScreen(id, btn) {
             document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-
-            if (id !== 'main') {
-                document.getElementById(id + '-screen').style.display = 'block';
-            }
+            if (id !== 'main') document.getElementById(id + '-screen').style.display = 'block';
             btn.classList.add('active');
+        }
+
+        function doTask(id, url, reward) {
+            if (completedTasks.includes(id)) return;
+            window.open(url, "_blank");
+            setTimeout(() => {
+                balance += reward;
+                completedTasks.push(id);
+                updateUI();
+            }, 2000);
         }
 
         function buyUpgrade(cost, profit) {
@@ -359,20 +406,21 @@
                 balance -= cost;
                 pph += profit;
                 updateUI();
+                if (tg) tg.HapticFeedback.notificationOccurred('success');
             } else {
-                alert("Маблағ кофӣ нест!");
+                if (tg) tg.showAlert("Маблағи кофӣ нест!");
             }
         }
 
         function inviteFriend() {
             const link = "t.me";
-            if (tg) tg.openTelegramLink(`t.me{link}&text=Ба+ман+ҳамроҳ+шав!`);
+            window.open(`t.me{link}&text=Join+and+Earn!`);
         }
 
-        // Цикл игры
+        // Главный цикл: Доход в час (пассив) и восстановление энергии
         setInterval(() => {
-            if (pph > 0) balance += (pph / 3600);
-            if (energy < maxEnergy) energy += 1;
+            if (pph > 0) balance += (pph / 3600); // Каждую секунду добавляем часть часового дохода
+            if (energy < maxEnergy) energy++;
             updateUI();
         }, 1000);
 

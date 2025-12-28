@@ -278,7 +278,7 @@
                 <div class="task-icon" style="background: #0088cc;">✈️</div>
                 <div><b>Telegram Channel</b><br><span style="color:var(--primary)">+5,000 M</span></div>
             </div>
-            <button id="task-tg" class="btn-action" onclick="doTask('tg', 't.me', 5000)">Иҷро</button>
+            <button id="task-tg" class="btn-action" onclick="doTask('tg', 't.me/mcointj', 5000)">Иҷро</button>
         </div>
         <div class="task-card">
             <div class="task-info">
@@ -294,7 +294,22 @@
 
     <!-- Mining Screen (ПОЛНОСТЬЮ РАБОЧИЙ) -->
     <div id="mining-screen" class="screen">
-        <h2 style="color: var(--primary);">⛏️ Майнинг</h2>
+        <h2 style="color: var(--primary);">⛏️ Майнинг ва Буст</h2>
+
+        <!-- Улучшение клика (Multitap) -->
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background: linear-gradient(135deg, #facc15, #fbbf24); color: #000;">⚡
+                </div>
+                <div>
+                    <b>Multitap (Ламс)</b><br>
+                    <span id="tap-level-info" style="color:var(--primary)">+1 за ламс</span>
+                </div>
+            </div>
+            <button id="multitap-btn" class="btn-action" onclick="upgradeTap()">1,000 M</button>
+        </div>
+
+        <!-- Ваши существующие карточки -->
         <div class="task-card">
             <div class="task-info">
                 <div class="task-icon" style="background: #444;">⚒️</div>
@@ -302,6 +317,7 @@
             </div>
             <button class="btn-action" onclick="buyUpgrade(500, 100)">500 M</button>
         </div>
+
         <div class="task-card">
             <div class="task-info">
                 <div class="task-icon" style="background: #444;">⚡</div>
@@ -309,6 +325,7 @@
             </div>
             <button class="btn-action" onclick="buyUpgrade(2000, 500)">2,000 M</button>
         </div>
+
         <div class="task-card">
             <div class="task-info">
                 <div class="task-icon" style="background: #444;">🏢</div>
@@ -317,6 +334,7 @@
             <button class="btn-action" onclick="buyUpgrade(10000, 2000)">10,000 M</button>
         </div>
     </div>
+
 
     <!-- Airdrop Screen -->
     <div id="airdrop-screen" class="screen">

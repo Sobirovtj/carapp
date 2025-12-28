@@ -3,10 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCOIN Premium 2025</title>
-    <script src="telegram.org"></script>
-    <!-- css start -->
     <style>
         :root {
             --primary: #facc15;
@@ -24,14 +22,13 @@
             margin: 0;
             background: radial-gradient(circle at center, #1a1a3a 0%, var(--bg) 100%);
             color: #fff;
-            font-family: system-ui, -apple-system, sans-serif;
+            font-family: system-ui;
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* Header */
         .header {
             padding: 15px;
             display: grid;
@@ -64,7 +61,6 @@
             color: var(--primary);
         }
 
-        /* Main Screen - Центровка монеты */
         #main-screen {
             flex: 1;
             display: flex;
@@ -137,7 +133,6 @@
             }
         }
 
-        /* Screens */
         .screen {
             display: none;
             position: absolute;
@@ -151,7 +146,6 @@
             overflow-y: auto;
         }
 
-        /* Cards (Tasks & Upgrades) */
         .task-card {
             background: var(--card-bg);
             padding: 15px;
@@ -195,7 +189,6 @@
             cursor: default;
         }
 
-        /* Footer */
         .footer {
             position: fixed;
             bottom: 0;
@@ -251,142 +244,110 @@
             margin-top: 4px;
         }
     </style>
-    <!-- css stop -->
-
 </head>
 
 <body>
 
     <div class="header">
-        <div class="stat-card">
-            <span>Фоида дар як соат</span>
-            <b id="profitHeader">+0</b>
-        </div>
-        <div class="stat-card">
-            <span>Дараҷа</span>
-            <b id="rank">БРОНЗА</b>
-        </div>
+        <div class="stat-card"><span>Фоида дар як соат</span><b id="profitHeader">+0</b></div>
+        <div class="stat-card"><span>Дараҷа</span><b id="rank">БРОНЗА</b></div>
     </div>
 
-
-    <!-- Main Screen -->
     <div id="main-screen">
         <div class="balance-box">
             <div id="balance">0</div>
-            <div style="color: #666; font-size: 14px; letter-spacing: 4px; font-weight: 900;">MCOIN</div>
+            <div style="color:#666;font-size:14px;letter-spacing:4px;font-weight:900;">MCOIN</div>
         </div>
         <div class="coin-wrapper">
             <div class="coin" id="tapBtn">M</div>
         </div>
     </div>
 
-    <!-- Вазифаҳо ва Дӯстон(старт) -->
     <div id="friends-screen" class="screen">
-        <h2 style="color: var(--primary);">👥 Вазифаҳо ва Дӯстон</h2>
+        <h2 style="color:var(--primary)">👥 Вазифаҳо ва Дӯстон</h2>
 
-        <!-- СЕКЦИЯ: ТЕЛЕГРАМ -->
         <div class="task-card">
             <div class="task-info">
-                <div class="task-icon" style="background: #0088cc;">✈️</div>
+                <div class="task-icon" style="background:#0088cc">✈️</div>
                 <div><b>Telegram Channel</b><br><span style="color:var(--primary)">+5,000 M</span></div>
             </div>
-            <button id="task-tg" class="btn-action" onclick="doTask('tg', 't.me', 5000)">Иҷро</button>
+            <button id="task-tg" class="btn-action" onclick="doTask('tg', 5000)">Иҷро</button>
         </div>
 
-        <!-- СЕКЦИЯ: ИНСТАГРАМ -->
         <div class="task-card">
             <div class="task-info">
-                <div class="task-icon" style="background: #e1306c;">📸</div>
+                <div class="task-icon" style="background:#e1306c">📸</div>
                 <div><b>Instagram</b><br><span style="color:var(--primary)">+5,000 M</span></div>
             </div>
-            <button id="task-ig" class="btn-action" onclick="doTask('ig', 'instagram.com', 5000)">Иҷро</button>
+            <button id="task-ig" class="btn-action" onclick="doTask('ig', 5000)">Иҷро</button>
         </div>
 
-        <!-- СЕКЦИЯ: ПАРТНЁРҲО (НОВОЕ) -->
-        <h3 style="color: var(--primary); margin-top: 25px; font-size: 18px;">🤝 Шарикони мо (Партнеры)</h3>
-
-        <div class="task-card" style="border: 1px solid rgba(255,255,255,0.1);">
-            <div class="task-info">
-                <div class="task-icon" style="background: #ff9900;">🔥</div>
-                <div><b>Partner Project</b><br><span style="color:var(--primary)">+10,000 M</span></div>
-            </div>
-            <button id="task-p1" class="btn-action" onclick="doTaskcargo1('p1', 't.me', 10000)">Иҷро</button>
-        </div>
-
-        <div class="task-card" style="border: 1px solid rgba(255,255,255,0.1);">
-            <div class="task-info">
-                <div class="task-icon" style="background: #5865F2;">💎</div>
-                <div><b>Crypto Community</b><br><span style="color:var(--primary)">+7,000 M</span></div>
-            </div>
-            <button id="task-p2" class="btn-action" onclick="doTaskcargo2('p2', 't.me', 7000)">Иҷро</button>
-        </div>
-
-        <!-- КНОПКА ПРИГЛАШЕНИЯ -->
-        <button onclick="inviteFriend()"
-            style="background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 14px; width: 100%; font-weight: 800; font-size: 16px; margin-top: 20px; cursor: pointer;">
-            🔗 Даъвати дӯстон
-        </button>
-    </div>
-
-    <!-- Вазифаҳо ва Дӯстон (стоп) -->
-
-
-    <!--  Майнинг (старт) -->
-    <div id="mining-screen" class="screen">
-        <h2 style="color: var(--primary);">⛏️ Майнинг ва Буст</h2>
-
-        <!-- Улучшение клика (Multitap) -->
         <div class="task-card">
             <div class="task-info">
-                <div class="task-icon" style="background: linear-gradient(135deg, #facc15, #fbbf24); color: #000;">⚡
-                </div>
-                <div>
-                    <b>Multitap (Ламс)</b><br>
-                    <span id="tap-level-info" style="color:var(--primary)">+1 за ламс</span>
+                <div class="task-icon" style="background:#ff9900">🔥</div>
+                <div><b>Partner Project</b><br><span style="color:var(--primary)">+10,000 M</span></div>
+            </div>
+            <button id="task-p1" class="btn-action" onclick="doTask('p1', 10000,'https://t.me/partner1')">Иҷро</button>
+        </div>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:#5865F2">💎</div>
+                <div><b>Crypto Community</b><br><span style="color:var(--primary)">+7,000 M</span></div>
+            </div>
+            <button id="task-p2" class="btn-action" onclick="doTask('p2', 7000,'https://t.me/partner2')">Иҷро</button>
+        </div>
+
+        <button onclick="inviteFriend()"
+            style="background: var(--primary); color: #000; border: none; padding:16px; border-radius:14px; width:100%; font-weight:800; font-size:16px; margin-top:20px; cursor:pointer;">🔗
+            Даъвати дӯстон</button>
+    </div>
+
+    <div id="mining-screen" class="screen">
+        <h2 style="color:var(--primary)">⛏️ Майнинг ва Буст</h2>
+
+        <div class="task-card">
+            <div class="task-info">
+                <div class="task-icon" style="background:linear-gradient(135deg,#facc15,#fbbf24);color:#000">⚡</div>
+                <div><b>Multitap (Ламс)</b><br><span id="tap-level-info" style="color:var(--primary)">+1 за ламс</span>
                 </div>
             </div>
             <button id="multitap-btn" class="btn-action" onclick="upgradeTap()">1,000 M</button>
         </div>
 
-        <!-- Ваши существующие карточки -->
         <div class="task-card">
             <div class="task-info">
-                <div class="task-icon" style="background: #444;">⚒️</div>
+                <div class="task-icon" style="background:#444">⚒️</div>
                 <div><b>Hamster Farm</b><br><span style="color:var(--primary)">+100 /соат</span></div>
             </div>
-            <button class="btn-action" onclick="buyUpgrade(500, 100)">500 M</button>
+            <button class="btn-action" onclick="buyUpgrade(500,100)">500 M</button>
         </div>
 
         <div class="task-card">
             <div class="task-info">
-                <div class="task-icon" style="background: #444;">⚡</div>
+                <div class="task-icon" style="background:#444">⚡</div>
                 <div><b>GPU RTX 5090</b><br><span style="color:var(--primary)">+500 /соат</span></div>
             </div>
-            <button class="btn-action" onclick="buyUpgrade(2000, 500)">2,000 M</button>
+            <button class="btn-action" onclick="buyUpgrade(2000,500)">2,000 M</button>
         </div>
 
         <div class="task-card">
             <div class="task-info">
-                <div class="task-icon" style="background: #444;">🏢</div>
+                <div class="task-icon" style="background:#444">🏢</div>
                 <div><b>Mining Center</b><br><span style="color:var(--primary)">+2,000 /соат</span></div>
             </div>
-            <button class="btn-action" onclick="buyUpgrade(10000, 2000)">10,000 M</button>
+            <button class="btn-action" onclick="buyUpgrade(10000,2000)">10,000 M</button>
         </div>
     </div>
-    <!--  Майнинг (стоп) -->
 
-
-
-    <!-- Airdrop Screen -->
     <div id="airdrop-screen" class="screen">
-        <h2 style="color: var(--primary);">💎 Airdrop</h2>
-        <div class="stat-card" style="padding: 30px;">
+        <h2 style="color:var(--primary)">💎 Airdrop</h2>
+        <div class="stat-card" style="padding:30px;">
             <p>Листинг дар биржаҳо: <b>Май 2026</b></p>
             <p>Баланси шумо ба холҳо табдил дода мешавад.</p>
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer">
         <div class="energy-info"><span>⚡ Энергия</span><span><span id="energyVal">500</span>/500</span></div>
         <div class="progress-bar">
@@ -400,15 +361,15 @@
         </div>
     </div>
 
-    <!-- ja start -->
     <script>
-        const tg = window.Telegram?.WebApp;
-        tg?.expand();
+        const tg = window.Telegram?.WebApp; tg?.expand();
 
         let balance = parseFloat(localStorage.getItem("mc_bal")) || 0;
         let energy = parseInt(localStorage.getItem("mc_eng")) || 500;
         let pph = parseFloat(localStorage.getItem("mc_pph")) || 0;
         let completedTasks = JSON.parse(localStorage.getItem("mc_tasks")) || [];
+        let tapValue = 1;
+        let incomePerHour = 0;
         const maxEnergy = 500;
 
         function updateUI() {
@@ -416,12 +377,10 @@
             document.getElementById("energyVal").textContent = energy;
             document.getElementById("energyFill").style.width = (energy / maxEnergy * 100) + "%";
             document.getElementById("profitHeader").textContent = "+" + pph.toLocaleString();
-
             completedTasks.forEach(id => {
                 const btn = document.getElementById("task-" + id);
                 if (btn) { btn.textContent = "Иҷро шуд"; btn.disabled = true; }
             });
-
             localStorage.setItem("mc_bal", balance);
             localStorage.setItem("mc_eng", energy);
             localStorage.setItem("mc_pph", pph);
@@ -430,163 +389,31 @@
 
         document.getElementById("tapBtn").addEventListener("pointerdown", (e) => {
             if (energy <= 0) return;
-            balance += 1; energy -= 1;
+            balance += tapValue; energy--;
             if (tg) tg.HapticFeedback.impactOccurred('light');
-            createPlusOne(e.clientX || e.touches.clientX, e.clientY || e.touches.clientY);
+            createPlusOne(e.clientX || e.touches?.[0]?.clientX, e.clientY || e.touches?.[0]?.clientY);
             updateUI();
         });
 
-        function createPlusOne(x, y) {
-            const el = document.createElement("div");
-            el.className = "plus-one"; el.textContent = "+1";
-            el.style.left = (x - 15) + "px"; el.style.top = (y - 30) + "px";
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 700);
-        }
+        function createPlusOne(x, y) { const el = document.createElement("div"); el.className = "plus-one"; el.textContent = "+1"; el.style.left = (x - 15) + "px"; el.style.top = (y - 30) + "px"; document.body.appendChild(el); setTimeout(() => el.remove(), 700); }
+        function showScreen(id, btn) { document.querySelectorAll('.screen').forEach(s => s.style.display = 'none'); document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); if (id !== 'main') document.getElementById(id + '-screen').style.display = 'block'; btn.classList.add('active'); }
 
-        function showScreen(id, btn) {
-            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            if (id !== 'main') document.getElementById(id + '-screen').style.display = 'block';
-            btn.classList.add('active');
-        }
-
-        //doTaskcargo1start
-        function doTaskcargo1(id, reward) {
-            const url = "https://www.instagram.com/barodar_cargo";
+        function doTask(id, reward, url) {
             if (completedTasks.includes(id)) return;
-            window.open(url, "_blank");
-            setTimeout(() => {
-                balance += reward;
-                completedTasks.push(id);
-                updateUI();
-            }, 2000);
-        }
-        //doTaskcargo1stop
-
-        //doTaskcargo2start
-        function doTaskcargo2(id, reward) {
-            const url = "https://t.me/barodarcargo";
-            if (completedTasks.includes(id)) return;
-            window.open(url, "_blank");
-            setTimeout(() => {
-                balance += reward;
-                completedTasks.push(id);
-                updateUI();
-            }, 2000);
-        }
-        //doTaskcargo2stop
-        function doTask(id, reward) {
-            const url = "https://www.instagram.com/mcointj/?igsh=MTl3OHJkZXU3MXBtdw%3D%3D#";
-            if (completedTasks.includes(id)) return;
-            window.open(url, "_blank");
-            setTimeout(() => {
-                balance += reward;
-                completedTasks.push(id);
-                updateUI();
-            }, 2000);
+            window.open(url || "https://www.instagram.com/mcointj/?igsh=MTl3OHJkZXU3MXBtdw%3D%3D#", "_blank");
+            setTimeout(() => { balance += reward; completedTasks.push(id); updateUI(); }, 2000);
         }
 
-
-        function buyUpgrade(cost, profit) {
-            if (balance >= cost) {
-                balance -= cost;
-                pph += profit;
-                updateUI();
-                if (tg) {
-                    tg.HapticFeedback.notificationOccurred('success');
-                    // Добавляем уведомление здесь:
-                    tg.showAlert("Харид шуд!");
-                }
-            } else {
-                if (tg) tg.showAlert("Маблағи кофӣ нест!");
-            }
-        }
-
-
-        function inviteFriend() {
-            window.open("t.me/@mcointj_bot", "_blank");
-        }
-
-        // Главный цикл: Доход в час (пассив) и восстановление энергии
-        setInterval(() => {
-            if (pph > 0) balance += (pph / 3600); // Каждую секунду добавляем часть часового дохода
-            if (energy < maxEnergy) energy++;
-            updateUI();
-        }, 1000);
-
-        updateUI();
-
-        //Маблағ старт
-        // Функция для 3-х нижних карточек
-        function buyUpgrade(price, profit, event) {
-            if (balance >= price) {
-                balance -= price;
-                autoProfit += profit;
-                updateUI();
-
-                // Логика смены текста на кнопке
-                const btn = event.target;
-                const originalText = btn.innerText;
-
-                btn.innerText = "Харидорӣ шуд ✅"; // Меняем текст
-                btn.style.background = "#22c55e";   // Делаем зеленой
-                btn.disabled = true;               // Отключаем на время
-
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.background = "";      // Возвращаем цвет
-                    btn.disabled = false;
-                }, 2000); // Через 2 секунды кнопка вернется в обычный вид
-
-            } else {
-                alert("Маблағи кофӣ нест!");
-            }
-        }
-
-        // Функция для Multitap (верхняя кнопка)
-        // Функция для обычных улучшений
         function buyUpgrade(cost, income) {
-            if (balance >= cost) {
-                balance -= cost;
-                incomePerHour += income;
-                updateUI(); // Обновление интерфейса (баланса и т.д.)
-
-                // Сообщение о покупке
-                alert("Харид шуд!");
-            } else {
-                alert("Маблағи кофӣ нест!"); // Если денег мало
-            }
+            if (balance >= cost) { balance -= cost; incomePerHour += income; updateUI(); alert("Харид шуд!"); } else { alert("Маблағи кофӣ нест!"); }
         }
 
-        // Функция для Multitap
-        function upgradeTap() {
-            let cost = 1000; // Цена multitap
-            if (balance >= cost) {
-                balance -= cost;
-                tapValue += 1;
-                updateUI();
+        function upgradeTap() { let cost = 1000; if (balance >= cost) { balance -= cost; tapValue += 1; updateUI(); alert("Харид шуд!"); } else { alert("Маблағи кофӣ нест!"); } }
+        function inviteFriend() { const inviteLink = "https://t.me/mcointj_bot"; const text = "🚀 Ба ман дар ин бозии нав ҳамроҳ шав ва тангаҳо ба даст ор!"; const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`; window.open(url, "_blank"); }
 
-                // Сообщение о покупке
-                alert("Харид шуд!");
-            } else {
-                alert("Маблағи кофӣ нест!");
-            }
-        }
-
-
-        //Маблағ стоп
-
-        //Создаем реферальную ссылку старт
-        function inviteFriend() {
-            const inviteLink = "https://t.me/mcointj_bot";
-            const text = "🚀 Ба ман дар ин бозии нав ҳамроҳ шав ва тангаҳо ба даст ор!";
-            const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`;
-            window.open(url, "_blank");
-        }
-        //Создаем реферальную ссылку стоп
+        setInterval(() => { if (pph > 0) balance += (pph / 3600); if (energy < maxEnergy) energy++; updateUI(); }, 1000);
+        updateUI();
     </script>
-    <!-- ja stop -->
 
 </body>
 

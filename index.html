@@ -522,6 +522,77 @@
 
         setInterval(() => { if (pph > 0) balance += (pph / 3600); if (energy < maxEnergy) energy++; updateUI(); }, 1000);
         updateUI();
+        // 1. Функсия барои захира кардани баланс дар Firebase
+        async function syncToFirebase() {
+            try {
+                await db.collection("users").doc(String(userId)).set({
+                    name: userName,
+                    balance: balance,
+                    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                console.log("Маълумот захира шуд!");
+            } catch (e) {
+                console.error("Хатогӣ дар захира:", e);
+            }
+        }
+
+        // 2. Функсия барои боргирии Топ-10 аз Firebase
+        async function loadLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '<tr><td colspan="3" style="text-align:center">Боргирӣ...</td></tr>';
+
+            try {
+                const snapshot = await db.collection("users")
+                    .orderBy("balance", "desc")
+                    .limit(10)
+                    .get();
+
+                list.innerHTML = '';
+                let rank = 1;
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    let rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+
+                    list.innerHTML += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                    <td style="padding: 15px 10px;">
+                        <span class="rank-badge ${rankClass}">${rank}</span>
+                    </td>
+                    <td style="font-weight: bold;">${data.name}</td>
+                    <td style="text-align: right; padding: 10px; color: var(--primary); font-weight: bold;">
+                        ${data.balance.toLocaleString()} M
+                    </td>
+                </tr>
+            `;
+                    rank++;
+                });
+            } catch (e) {
+                list.innerHTML = '<tr><td colspan="3" style="text-align:center; color:red">Хатои пайвастшавӣ</td></tr>';
+            }
+        }
+
+        // 3. Тағйирот дар функсияи клик (Tap)
+        // Боварӣ ҳосил кунед, ки дар функсияи клики шумо ин сатр ҳаст:
+        // if (balance % 10 === 0) syncToFirebase(); 
+        function showScreen(screenId) {
+            // Пӯшидани ҳамаи экранҳо
+            document.getElementById('main-screen').style.display = 'none';
+            document.getElementById('friends-screen').style.display = 'none';
+            document.getElementById('leaderboard-screen').style.display = 'none';
+
+            // Нишон додани экрани интихобшуда
+            if (screenId === 'main') {
+                document.getElementById('main-screen').style.display = 'flex';
+            } else {
+                document.getElementById(screenId + '-screen').style.display = 'block';
+            }
+
+            // Агар экран рейтинг бошад, маълумотро бор мекунем
+            if (screenId === 'leaderboard') {
+                loadLeaderboard();
+            }
+        }
 
     </script>
     <!-- Экран рейтинга -->

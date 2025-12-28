@@ -5,11 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MCOIN Premium 2025</title>
-    <!-- Firebase SDK -->
-    <script src="www.gstatic.com"></script>
-    <script src="www.gstatic.com"></script>
-    <!-- Telegram API -->
-    <script src="telegram.org"></script>
     <style>
         :root {
             --primary: #facc15;
@@ -248,36 +243,6 @@
             font-size: 10px;
             margin-top: 4px;
         }
-
-        tr.top-user {
-            background: rgba(250, 204, 21, 0.1);
-        }
-
-        .rank-badge {
-            width: 24px;
-            height: 24px;
-            display: inline-block;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 24px;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .gold {
-            background: #ffd700;
-            color: #000;
-        }
-
-        .silver {
-            background: #c0c0c0;
-            color: #000;
-        }
-
-        .bronze {
-            background: #cd7f32;
-            color: #000;
-        }
     </style>
 </head>
 
@@ -395,85 +360,10 @@
             <div class="nav-item" onclick="showScreen('mining', this)">⚒️<span>Майнинг</span></div>
             <div class="nav-item" onclick="showScreen('friends', this)">👥<span>Дӯстон</span></div>
             <div class="nav-item" onclick="showScreen('airdrop', this)">💎<span>Airdrop</span></div>
-            <div class="nav-item" onclick="showLeaderboard()">
-                <div style="font-size:20px;">🏆</div>
-                <span>Рейтинг</span>
-            </div>
-
         </div>
     </div>
 
     <script>
-        async function loadLeaderboard() {
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = '<p style="text-align:center">Боргирӣ...</p>';
-
-            try {
-                // Замените URL на адрес вашего сервера
-                const response = await fetch('your-api-server.com');
-                const realLeaders = await response.json();
-
-                list.innerHTML = '';
-                realLeaders.forEach((player, index) => {
-                    list.innerHTML += `
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <td style="padding: 15px 10px;">
-                        <span class="rank-badge ${index < 3 ? 'top' : ''}">${index + 1}</span>
-                    </td>
-                    <td style="font-weight: bold;">
-                        ${player.first_name} ${player.username ? '@' + player.username : ''}
-                    </td>
-                    <td style="text-align: right; padding: 10px; color: var(--primary);">
-                        ${player.balance.toLocaleString()} M
-                    </td>
-                </tr>
-            `;
-                });
-            } catch (e) {
-                list.innerHTML = '<p style="text-align:center; color:red">Хатогӣ ҳангоми боргирӣ</p>';
-            }
-        }
-
-        // Маълумоти намунавӣ барои рейтинг (дар оянда аз база меояд)
-        const leaders = [
-            { name: "Ali_Crypto", balance: "1,500,000" },
-            { name: "Daler_2025", balance: "1,250,000" },
-            { name: "Somon_M", balance: "980,000" },
-            { name: "Nigora_Fit", balance: "850,000" },
-            { name: "Jamshed_TJ", balance: "720,000" },
-            { name: "Siyovush", balance: "600,000" }
-        ];
-
-        function loadLeaderboard() {
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = '';
-
-            leaders.forEach((user, index) => {
-                let rankClass = '';
-                if (index === 0) rankClass = 'gold';
-                else if (index === 1) rankClass = 'silver';
-                else if (index === 2) rankClass = 'bronze';
-
-                list.innerHTML += `
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <td style="padding: 15px 10px;">
-                        <span class="rank-badge ${rankClass}">${index + 1}</span>
-                    </td>
-                    <td style="font-weight: bold;">${user.name}</td>
-                    <td style="text-align: right; padding: 10px; color: var(--primary); font-weight: bold;">
-                        ${user.balance} M
-                    </td>
-                </tr>
-            `;
-            });
-        }
-
-        // Барои кушодани экран ин функсияро истифода баред
-        function showLeaderboard() {
-            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-            document.getElementById('leaderboard-screen').style.display = 'block';
-            loadLeaderboard();
-        }
         const tg = window.Telegram?.WebApp; tg?.expand();
 
         let balance = parseFloat(localStorage.getItem("mc_bal")) || 0;
@@ -525,98 +415,7 @@
 
         setInterval(() => { if (pph > 0) balance += (pph / 3600); if (energy < maxEnergy) energy++; updateUI(); }, 1000);
         updateUI();
-        // 1. Функсия барои захира кардани баланс дар Firebase
-        async function syncToFirebase() {
-            try {
-                await db.collection("users").doc(String(userId)).set({
-                    name: userName,
-                    balance: balance,
-                    lastUpdate: firebase.firestore.FieldValue.serverTimestamp()
-                }, { merge: true });
-                console.log("Маълумот захира шуд!");
-            } catch (e) {
-                console.error("Хатогӣ дар захира:", e);
-            }
-        }
-
-        // 2. Функсия барои боргирии Топ-10 аз Firebase
-        async function loadLeaderboard() {
-            const list = document.getElementById('leaderboard-list');
-            list.innerHTML = '<tr><td colspan="3" style="text-align:center">Боргирӣ...</td></tr>';
-
-            try {
-                const snapshot = await db.collection("users")
-                    .orderBy("balance", "desc")
-                    .limit(10)
-                    .get();
-
-                list.innerHTML = '';
-                let rank = 1;
-
-                snapshot.forEach(doc => {
-                    const data = doc.data();
-                    let rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
-
-                    list.innerHTML += `
-                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                    <td style="padding: 15px 10px;">
-                        <span class="rank-badge ${rankClass}">${rank}</span>
-                    </td>
-                    <td style="font-weight: bold;">${data.name}</td>
-                    <td style="text-align: right; padding: 10px; color: var(--primary); font-weight: bold;">
-                        ${data.balance.toLocaleString()} M
-                    </td>
-                </tr>
-            `;
-                    rank++;
-                });
-            } catch (e) {
-                list.innerHTML = '<tr><td colspan="3" style="text-align:center; color:red">Хатои пайвастшавӣ</td></tr>';
-            }
-        }
-
-        // 3. Тағйирот дар функсияи клик (Tap)
-        // Боварӣ ҳосил кунед, ки дар функсияи клики шумо ин сатр ҳаст:
-        // if (balance % 10 === 0) syncToFirebase(); 
-        function showScreen(screenId) {
-            // Пӯшидани ҳамаи экранҳо
-            document.getElementById('main-screen').style.display = 'none';
-            document.getElementById('friends-screen').style.display = 'none';
-            document.getElementById('leaderboard-screen').style.display = 'none';
-
-            // Нишон додани экрани интихобшуда
-            if (screenId === 'main') {
-                document.getElementById('main-screen').style.display = 'flex';
-            } else {
-                document.getElementById(screenId + '-screen').style.display = 'block';
-            }
-
-            // Агар экран рейтинг бошад, маълумотро бор мекунем
-            if (screenId === 'leaderboard') {
-                loadLeaderboard();
-            }
-        }
-
     </script>
-    <!-- Экран рейтинга -->
-    <div id="leaderboard-screen" class="screen">
-        <h2 style="color:var(--primary); text-align: center;">🏆 Топ Пешсафон</h2>
-
-        <div style="background: var(--card-bg); border-radius: 20px; padding: 10px;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                <thead>
-                    <tr style="color: #666; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                        <th style="padding: 10px;">Ҷой</th>
-                        <th>Ном</th>
-                        <th style="text-align: right; padding: 10px;">Баланс</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-list">
-                    <!-- Рӯйхат тавассути JS пур карда мешавад -->
-                </tbody>
-            </table>
-        </div>
-    </div>
 
 </body>
 

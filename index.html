@@ -270,7 +270,7 @@
         </div>
     </div>
 
-    <!-- Friends Screen -->
+    <!-- Friends Screen (старт) -->
     <div id="friends-screen" class="screen">
         <h2 style="color: var(--primary);">👥 Вазифаҳо ва Дӯстон</h2>
         <div class="task-card">
@@ -291,8 +291,10 @@
             style="background: var(--primary); color: #000; border: none; padding: 16px; border-radius: 14px; width: 100%; font-weight: 800; font-size: 16px; margin-top: 20px;">🔗
             Даъвати дӯстон</button>
     </div>
+    <!-- Friends Screen (стоп) -->
 
-    <!-- Mining Screen (ПОЛНОСТЬЮ РАБОЧИЙ) -->
+
+    <!-- Mining Screen (старт) -->
     <div id="mining-screen" class="screen">
         <h2 style="color: var(--primary);">⛏️ Майнинг ва Буст</h2>
 
@@ -334,6 +336,8 @@
             <button class="btn-action" onclick="buyUpgrade(10000, 2000)">10,000 M</button>
         </div>
     </div>
+    <!-- Mining Screen (стоп) -->
+
 
 
     <!-- Airdrop Screen -->
@@ -443,6 +447,74 @@
         }, 1000);
 
         updateUI();
+
+        //Маблағ старт
+        // Функция для 3-х нижних карточек
+        function buyUpgrade(price, profit, event) {
+            if (balance >= price) {
+                balance -= price;
+                autoProfit += profit;
+                updateUI();
+
+                // Логика смены текста на кнопке
+                const btn = event.target;
+                const originalText = btn.innerText;
+
+                btn.innerText = "Харидорӣ шуд ✅"; // Меняем текст
+                btn.style.background = "#22c55e";   // Делаем зеленой
+                btn.disabled = true;               // Отключаем на время
+
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";      // Возвращаем цвет
+                    btn.disabled = false;
+                }, 2000); // Через 2 секунды кнопка вернется в обычный вид
+
+            } else {
+                alert("Маблағи кофӣ нест!");
+            }
+        }
+
+        // Функция для Multitap (верхняя кнопка)
+        function upgradeTap(event) {
+            let price = 1000;
+            if (balance >= price) {
+                balance -= price;
+                tapValue += 1;
+                updateUI();
+
+                const btn = event.target;
+                btn.innerText = "Харидорӣ шуд ✅";
+                btn.style.background = "#22c55e";
+
+                setTimeout(() => {
+                    btn.innerText = "1,000 M";
+                    btn.style.background = "";
+                }, 2000);
+            } else {
+                alert("Маблағи кофӣ нест!");
+            }
+        }
+
+        //Маблағ стоп
+        //Создаем реферальную ссылку старт
+        function inviteFriend() {
+            const botUsername = "mcointj_bot"; // НАПРИМЕР: mcointj_bot
+            const userId = "12345"; // Здесь должен быть реальный ID пользователя из вашей базы
+
+            // Создаем реферальную ссылку
+            const inviteLink = `t.me{botUsername}?start=ref${userId}`;
+
+            // Текст сообщения
+            const text = encodeURIComponent("🚀 Ба ман дар ин бозии нав ҳамроҳ шав ва тангаҳо ба даст ор!");
+
+            // Ссылка для Telegram Share
+            const telegramShareUrl = `t.me{inviteLink}&text=${text}`;
+
+            // Открываем Telegram для выбора друга
+            window.open(telegramShareUrl, '_blank');
+        }
+        //Создаем реферальную ссылку стоп
     </script>
 </body>
 

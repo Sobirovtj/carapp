@@ -435,7 +435,7 @@
         }
 
         function inviteFriend() {
-            window.open("https://t.me/mcointj_bot", "_blank");
+            window.open("t.me/@mcointj_bot", "_blank");
         }
 
         // Главный цикл: Доход в час (пассив) и восстановление энергии
@@ -498,20 +498,10 @@
         //Маблағ стоп
         //Создаем реферальную ссылку старт
         function inviteFriend() {
-            const botUsername = "mcointj_bot"; // НАПРИМЕР: mcointj_bot
-            const userId = "12345"; // Здесь должен быть реальный ID пользователя из вашей базы
-
-            // Создаем реферальную ссылку
-            const inviteLink = `t.me{botUsername}?start=ref${userId}`;
-
-            // Текст сообщения
-            const text = encodeURIComponent("🚀 Ба ман дар ин бозии нав ҳамроҳ шав ва тангаҳо ба даст ор!");
-
-            // Ссылка для Telegram Share
-            const telegramShareUrl = `t.me{inviteLink}&text=${text}`;
-
-            // Открываем Telegram для выбора друга
-            window.open(telegramShareUrl, '_blank');
+            const inviteLink = "https://t.me/mcointj_bot";
+            const text = "🚀 Ба ман дар ин бозии нав ҳамроҳ шав ва тангаҳо ба даст ор!";
+            const url = `https://t.me/share/url?url=${encodeURIComponent(inviteLink)}&text=${encodeURIComponent(text)}`;
+            window.open(url, "_blank");
         }
         //Создаем реферальную ссылку стоп
     </script>

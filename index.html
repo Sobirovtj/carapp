@@ -4,12 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MCOIN Premium 2025</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>MCOIN Premium</title>
+    <script src="telegram.org"></script>
     <style>
         :root {
             --primary: #facc15;
-            --secondary: #fbbf24;
             --bg: #050510;
             --card-bg: rgba(255, 255, 255, 0.07);
         }
@@ -24,71 +23,78 @@
             margin: 0;
             background: radial-gradient(circle at center, #1a1a3a 0%, var(--bg) 100%);
             color: #fff;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             height: 100vh;
             overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* Header Stats */
+        /* Шапка */
         .header {
             padding: 15px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
+            position: absolute;
+            top: 0;
+            width: 100%;
             z-index: 10;
         }
 
         .stat-card {
             background: var(--card-bg);
-            padding: 12px;
-            border-radius: 16px;
+            padding: 10px;
+            border-radius: 14px;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px);
         }
 
         .stat-card span {
             font-size: 10px;
-            color: #aaa;
+            color: #888;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .stat-card b {
             display: block;
-            font-size: 16px;
+            font-size: 15px;
             color: var(--primary);
-            margin-top: 4px;
         }
 
-        /* Main Game Screen */
+        /* Главный экран - Центровка монеты */
         #main-screen {
             flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            position: relative;
+            /* Центр по вертикали */
+            align-items: center;
+            /* Центр по горизонтали */
+            padding-bottom: 80px;
+            /* Компенсация для меню */
         }
 
         .balance-box {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
         }
 
         #balance {
-            font-size: 56px;
+            font-size: 54px;
             font-weight: 900;
             color: var(--primary);
-            text-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+            text-shadow: 0 0 30px rgba(250, 204, 21, 0.3);
         }
 
-        .coin-container {
+        .coin-wrapper {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 270px;
+            height: 270px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .coin {
@@ -99,28 +105,27 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 140px;
+            font-size: 130px;
             font-weight: 900;
-            color: #222;
-            box-shadow: 0 0 50px rgba(250, 204, 21, 0.2), inset 0 0 20px rgba(0, 0, 0, 0.2);
+            color: #000;
+            box-shadow: 0 0 60px rgba(250, 204, 21, 0.3);
             cursor: pointer;
-            transition: transform 0.1s ease;
-            position: relative;
+            transition: transform 0.05s ease;
             z-index: 2;
         }
 
         .coin:active {
-            transform: scale(0.95);
+            transform: scale(0.92);
         }
 
-        /* Floating Animation */
+        /* Анимация +1 */
         .plus-one {
             position: absolute;
             color: var(--primary);
-            font-weight: bold;
-            font-size: 24px;
+            font-size: 28px;
+            font-weight: 900;
             pointer-events: none;
-            animation: floatUp 0.8s ease-out forwards;
+            animation: floatUp 0.7s ease-out forwards;
             z-index: 100;
         }
 
@@ -131,12 +136,12 @@
             }
 
             100% {
-                transform: translateY(-100px);
+                transform: translateY(-120px);
                 opacity: 0;
             }
         }
 
-        /* Screens */
+        /* Экраны меню */
         .screen {
             display: none;
             position: absolute;
@@ -145,84 +150,78 @@
             width: 100%;
             height: 100%;
             background: var(--bg);
-            padding: 20px;
-            padding-bottom: 120px;
+            padding: 100px 20px 120px 20px;
+            z-index: 15;
             overflow-y: auto;
-            z-index: 20;
         }
 
-        .screen h2 {
-            color: var(--primary);
-            border-bottom: 1px solid var(--card-bg);
-            padding-bottom: 10px;
-        }
-
-        /* Footer & Energy */
+        /* Футер и Энергия */
         .footer {
             position: fixed;
             bottom: 0;
             width: 100%;
-            padding: 20px;
-            background: rgba(5, 5, 16, 0.95);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(15px);
+            padding: 15px 20px 25px 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             z-index: 30;
         }
 
-        .energy-box {
-            margin-bottom: 15px;
+        .energy-info {
+            display: flex;
+            justify-content: space-between;
             font-size: 14px;
+            margin-bottom: 8px;
             font-weight: bold;
         }
 
-        .progress {
-            height: 12px;
+        .progress-bar {
+            height: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
             overflow: hidden;
-            margin-top: 5px;
+            margin-bottom: 15px;
         }
 
         #energyFill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
             width: 100%;
-            transition: width 0.3s;
+            background: linear-gradient(90deg, #facc15, #fbbf24);
+            transition: width 0.2s;
         }
 
         .nav {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            display: flex;
+            justify-content: space-around;
         }
 
-        .nav-btn {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 10px;
+        .nav-item {
             text-align: center;
-            font-size: 20px;
+            font-size: 22px;
+            color: #666;
             cursor: pointer;
         }
 
-        .nav-btn span {
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item span {
             display: block;
             font-size: 10px;
             margin-top: 4px;
-            color: #888;
         }
 
-        /* Upgrade Button */
-        .btn-upgrade {
-            background: linear-gradient(90deg, #facc15, #ca8a04);
+        .btn-action {
+            background: var(--primary);
             color: #000;
             border: none;
             padding: 15px;
             border-radius: 12px;
             width: 100%;
             font-weight: bold;
-            margin-top: 10px;
-            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -230,160 +229,150 @@
 <body>
 
     <div class="header">
-        <div class="stat-card"><span>Фоида/соат</span><b id="profitHeader">+0</b></div>
-        <div class="stat-card"><span>Рутба</span><b id="rank">BRONZE</b></div>
+        <div class="stat-card">
+            <span>Фоида/соат</span>
+            <b id="profitHeader">+0</b>
+        </div>
+        <div class="stat-card">
+            <span>Рутба</span>
+            <b id="rank">BRONZE</b>
+        </div>
     </div>
 
-    <!-- Main Screen -->
+    <!-- Основной экран -->
     <div id="main-screen">
         <div class="balance-box">
             <div id="balance">0</div>
-            <div style="color: #888; letter-spacing: 2px;">MCOIN</div>
+            <div style="color: #888; font-size: 14px; letter-spacing: 3px;">MCOIN</div>
         </div>
 
-        <div class="coin-container" id="tapBtn">
-            <div class="coin">M</div>
+        <div class="coin-wrapper">
+            <div class="coin" id="tapBtn">M</div>
         </div>
     </div>
 
-    <!-- Other Screens -->
+    <!-- Другие экраны -->
     <div id="mining-screen" class="screen">
         <h2>⛏️ Майнинг</h2>
-        <div class="stat-card" style="margin-bottom: 20px;">
-            <span>Суръати ҳозира</span>
+        <div class="stat-card">
+            <span>Даромади ҷорӣ</span>
             <b id="p-hour">0</b>
         </div>
-        <button class="btn-upgrade" onclick="buyUpgrade(500, 50)">⚙️ Харидани Таҷҳизот (500 M)</button>
-        <p style="color: #888; font-size: 12px;">Ҳар як таҷҳизот ба шумо +50 танга дар як соат меорад.</p>
+        <button class="btn-action" onclick="buyUpgrade(500, 50)">⚒️ Харидани Таҷҳизот (500)</button>
     </div>
 
     <div id="friends-screen" class="screen">
         <h2>👥 Дӯстон</h2>
-        <p>Дӯстони худро даъват кунед ва 10% аз даромади онҳоро гиред!</p>
-        <button class="btn-upgrade" onclick="inviteFriend()">🔗 Нусхабардории истинод</button>
+        <p>Барои ҳар як дӯст +5,000 MCOIN бонус гиред!</p>
+        <button class="btn-action" onclick="inviteFriend()">🔗 Даъват кардан</button>
     </div>
 
     <div id="airdrop-screen" class="screen">
         <h2>💎 Airdrop</h2>
-        <div class="stat-card">
-            <p>Listing ба наздикӣ дар биржаҳо!</p>
-            <b style="font-size: 12px;">Марҳилаи 1: Ҷамъоварии холҳо</b>
-        </div>
+        <p>Listing ба наздикӣ дар биржаҳои DEX!</p>
+        <div class="stat-card">Status: Coming Soon</div>
     </div>
 
-    <!-- Footer Navigation -->
+    <!-- Навигация и Энергия -->
     <div class="footer">
-        <div class="energy-box">
-            ⚡ <span id="energyVal">500</span> / 500
-            <div class="progress">
-                <div id="energyFill"></div>
-            </div>
+        <div class="energy-info">
+            <span>⚡ Энергия</span>
+            <span><span id="energyVal">500</span>/500</span>
+        </div>
+        <div class="progress-bar">
+            <div id="energyFill"></div>
         </div>
 
         <div class="nav">
-            <div class="nav-btn" onclick="showScreen('main')">🏠<span>Асосӣ</span></div>
-            <div class="nav-btn" onclick="showScreen('mining')">⛏️<span>Майнинг</span></div>
-            <div class="nav-btn" onclick="showScreen('friends')">👥<span>Дӯстон</span></div>
-            <div class="nav-btn" onclick="showScreen('airdrop')">💎<span>Airdrop</span></div>
+            <div class="nav-item active" onclick="showScreen('main', this)">🏠<span>Асосӣ</span></div>
+            <div class="nav-item" onclick="showScreen('mining', this)">⛏️<span>Майнинг</span></div>
+            <div class="nav-item" onclick="showScreen('friends', this)">👥<span>Дӯстон</span></div>
+            <div class="nav-item" onclick="showScreen('airdrop', this)">💎<span>Airdrop</span></div>
         </div>
     </div>
 
     <script>
         const tg = window.Telegram?.WebApp;
         tg?.expand();
-        if (tg) tg.headerColor = "#050510";
 
-        // Game State
-        let balance = parseFloat(localStorage.getItem("mcoin_bal")) || 0;
-        let energy = parseInt(localStorage.getItem("mcoin_eng")) || 500;
-        let profitPerHour = parseFloat(localStorage.getItem("mcoin_pph")) || 0;
+        let balance = parseFloat(localStorage.getItem("mc_bal")) || 0;
+        let energy = parseInt(localStorage.getItem("mc_eng")) || 500;
+        let pph = parseFloat(localStorage.getItem("mc_pph")) || 0;
         const maxEnergy = 500;
 
-        // UI Elements
         const balanceEl = document.getElementById("balance");
         const energyVal = document.getElementById("energyVal");
         const energyFill = document.getElementById("energyFill");
         const profitHeader = document.getElementById("profitHeader");
-        const phourEl = document.getElementById("p-hour");
 
         function updateUI() {
             balanceEl.textContent = Math.floor(balance).toLocaleString();
             energyVal.textContent = energy;
             energyFill.style.width = (energy / maxEnergy * 100) + "%";
-            profitHeader.textContent = "+" + (profitPerHour >= 1000 ? (profitPerHour / 1000).toFixed(1) + "K" : profitPerHour);
-            phourEl.textContent = profitPerHour;
+            profitHeader.textContent = "+" + (pph >= 1000 ? (pph / 1000).toFixed(1) + "K" : pph);
+            document.getElementById("p-hour").textContent = pph;
 
-            localStorage.setItem("mcoin_bal", balance);
-            localStorage.setItem("mcoin_eng", energy);
-            localStorage.setItem("mcoin_pph", profitPerHour);
+            localStorage.setItem("mc_bal", balance);
+            localStorage.setItem("mc_eng", energy);
+            localStorage.setItem("mc_pph", pph);
         }
 
-        // Tap Logic
+        // Клик по монете
         document.getElementById("tapBtn").addEventListener("pointerdown", (e) => {
             if (energy <= 0) return;
 
-            // Update data
             balance += 1;
             energy -= 1;
 
-            // Haptic feedback
-            if (tg) tg.HapticFeedback.impactOccurred('medium');
+            if (tg) tg.HapticFeedback.impactOccurred('light');
 
-            // Floating +1
-            const rect = e.target.getBoundingClientRect();
+            // Анимация +1
             const x = e.clientX || e.touches[0].clientX;
             const y = e.clientY || e.touches[0].clientY;
+            createPlusOne(x, y);
 
-            createFloatingText(x, y);
             updateUI();
         });
 
-        function createFloatingText(x, y) {
+        function createPlusOne(x, y) {
             const el = document.createElement("div");
             el.className = "plus-one";
             el.textContent = "+1";
-            el.style.left = x + "px";
-            el.style.top = y + "px";
+            el.style.left = (x - 10) + "px";
+            el.style.top = (y - 20) + "px";
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 800);
+            setTimeout(() => el.remove(), 700);
         }
 
-        // Navigation
-        function showScreen(screenId) {
+        function showScreen(id, btn) {
             document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-            if (screenId !== 'main') {
-                document.getElementById(screenId + '-screen').style.display = 'block';
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+
+            if (id !== 'main') {
+                document.getElementById(id + '-screen').style.display = 'block';
             }
+            btn.classList.add('active');
         }
 
-        // Upgrades
         function buyUpgrade(cost, profit) {
             if (balance >= cost) {
                 balance -= cost;
-                profitPerHour += profit;
+                pph += profit;
                 updateUI();
-                if (tg) tg.showAlert("Шумо таҷҳизоти нав харидед!");
             } else {
-                if (tg) tg.showAlert("Маблағи кофӣ нест!");
+                alert("Маблағ кофӣ нест!");
             }
         }
 
         function inviteFriend() {
-            const text = "Ба бозии MCOIN ҳамроҳ шав ва пул кор кун!";
-            const url = `t.me{tg?.initDataUnsafe?.user?.id || '123'}`;
-            window.open(`t.me{encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+            const link = "t.me";
+            if (tg) tg.openTelegramLink(`t.me{link}&text=Ба+ман+ҳамроҳ+шав!`);
         }
 
-        // Game Loop (Passive Income & Energy Recovery)
+        // Цикл игры
         setInterval(() => {
-            // Passive income (per second)
-            if (profitPerHour > 0) {
-                balance += (profitPerHour / 3600);
-            }
-            // Energy recovery
-            if (energy < maxEnergy) {
-                energy++;
-            }
+            if (pph > 0) balance += (pph / 3600);
+            if (energy < maxEnergy) energy += 1;
             updateUI();
         }, 1000);
 
